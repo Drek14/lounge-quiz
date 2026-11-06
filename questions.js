@@ -1,4 +1,4 @@
-// Question bank — medium difficulty, Aussie-flavoured. Flags and Pictures are drawn inline so they load instantly.
+// Question bank — Easy, Medium and Hard, Aussie-flavoured. Flags and Pictures are drawn inline so they load instantly.
 // Format: { cat, q, options:[4 strings], a: index of correct option, svg?: inline svg string }
 // Add your own anywhere in here. Photo questions come from photos/manifest.json (see README).
 
@@ -428,3 +428,565 @@ const QUESTIONS = [
 
 QUESTIONS.forEach(q => { if (!q.d) q.d = 'medium'; });
 if (typeof module !== 'undefined') module.exports = { CATEGORIES, QUESTIONS };
+
+// ---- Nov 2026: reviewed fixes + Hard tier and extra Easy/Medium questions ----
+(function () {
+  const FIX = {
+ "1": {
+  "cat": "sports",
+  "q": "Which country became the first to win five FIFA World Cups, in 2002?",
+  "options": [
+   "Germany",
+   "Argentina",
+   "Brazil",
+   "Italy"
+  ],
+  "a": 2,
+  "d": "medium"
+ },
+ "3": {
+  "cat": "sports",
+  "q": "In 2023, LeBron James broke whose NBA career regular-season points record?",
+  "options": [
+   "Michael Jordan",
+   "Kobe Bryant",
+   "Kareem Abdul-Jabbar",
+   "Karl Malone"
+  ],
+  "a": 2,
+  "d": "medium"
+ },
+ "6": {
+  "cat": "sports",
+  "q": "How many Formula 1 world titles did Michael Schumacher win?",
+  "options": [
+   "5",
+   "6",
+   "7",
+   "8"
+  ],
+  "a": 2,
+  "d": "medium"
+ },
+ "7": {
+  "cat": "sports",
+  "q": "What is the standard maximum break in a single frame of snooker?",
+  "options": [
+   "147",
+   "150",
+   "180",
+   "100"
+  ],
+  "a": 0,
+  "d": "medium"
+ },
+ "8": {
+  "cat": "sports",
+  "q": "Which country won both the 2019 and 2023 Rugby World Cups?",
+  "options": [
+   "New Zealand",
+   "Australia",
+   "England",
+   "South Africa"
+  ],
+  "a": 3,
+  "d": "medium"
+ },
+ "25": {
+  "cat": "maths",
+  "q": "The interior angles of a triangle add up to how many degrees?",
+  "options": [
+   "90°",
+   "180°",
+   "270°",
+   "360°"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "26": {
+  "cat": "maths",
+  "q": "What is 0.2 as a fraction in simplest form?",
+  "options": [
+   "1/2",
+   "1/4",
+   "1/5",
+   "2/5"
+  ],
+  "a": 2,
+  "d": "easy"
+ },
+ "38": {
+  "cat": "advmaths",
+  "q": "What is the sum of the integers from 1 to 100?",
+  "options": [
+   "4950",
+   "5000",
+   "5050",
+   "5100"
+  ],
+  "a": 2,
+  "d": "medium"
+ },
+ "51": {
+  "cat": "maths",
+  "q": "What is 3/4 as a percentage?",
+  "options": [
+   "65%",
+   "70%",
+   "75%",
+   "80%"
+  ],
+  "a": 2,
+  "d": "easy"
+ },
+ "80": {
+  "cat": "movies",
+  "q": "Who played Jack Dawson in Titanic (1997)?",
+  "options": [
+   "Brad Pitt",
+   "Leonardo DiCaprio",
+   "Matt Damon",
+   "Johnny Depp"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "81": {
+  "cat": "movies",
+  "q": "Which Australian actor plays Thor in the Marvel films?",
+  "options": [
+   "Liam Hemsworth",
+   "Hugh Jackman",
+   "Chris Hemsworth",
+   "Sam Worthington"
+  ],
+  "a": 2,
+  "d": "easy"
+ },
+ "94": {
+  "cat": "music",
+  "q": "Freddie Mercury was the frontman of which band?",
+  "options": [
+   "The Who",
+   "Queen",
+   "Led Zeppelin",
+   "Pink Floyd"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "118": {
+  "cat": "sports",
+  "q": "The annual NSW v Queensland State of Origin series is played in which sport?",
+  "options": [
+   "AFL",
+   "Rugby union",
+   "Rugby league",
+   "Cricket"
+  ],
+  "a": 2,
+  "d": "easy"
+ },
+ "145": {
+  "cat": "geo",
+  "q": "Brazil is on which continent?",
+  "options": [
+   "Africa",
+   "South America",
+   "North America",
+   "Europe"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "180": {
+  "cat": "food",
+  "q": "What are sushi rolls (maki) traditionally wrapped in?",
+  "options": [
+   "Rice paper",
+   "Seaweed",
+   "Lettuce",
+   "Tofu skin"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "196": {
+  "cat": "pop",
+  "q": "Mario and Luigi are characters in which game series?",
+  "options": [
+   "Sonic",
+   "Super Mario",
+   "Zelda",
+   "Kirby"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "199": {
+  "cat": "pop",
+  "q": "Elon Musk became CEO of which electric car company in 2008?",
+  "options": [
+   "Rivian",
+   "Tesla",
+   "Lucid",
+   "Polestar"
+  ],
+  "a": 1,
+  "d": "easy"
+ },
+ "203": {
+  "cat": "pop",
+  "q": "Who played the main Ken in Barbie (2023)?",
+  "options": [
+   "Ryan Reynolds",
+   "Ryan Gosling",
+   "Chris Evans",
+   "Chris Pine"
+  ],
+  "a": 1,
+  "d": "medium"
+ },
+ "208": {
+  "cat": "pop",
+  "q": "Which comedian was the original host of ABC's \"Hard Quiz\"?",
+  "options": [
+   "Shaun Micallef",
+   "Tom Gleeson",
+   "Hamish Blake",
+   "Rove McManus"
+  ],
+  "a": 1,
+  "d": "medium"
+ },
+ "215": {
+  "cat": "aussie",
+  "q": "What is a baby kangaroo called?",
+  "options": [
+   "Kit",
+   "Cub",
+   "Joey",
+   "Pup"
+  ],
+  "a": 2,
+  "d": "easy"
+ },
+ "226": {
+  "cat": "aussie",
+  "q": "In what year did Australian women win the right to vote federally?",
+  "options": [
+   "1894",
+   "1902",
+   "1918",
+   "1945"
+  ],
+  "a": 1,
+  "d": "medium"
+ },
+ "245": {
+  "cat": "animals",
+  "q": "What is a group of crows called?",
+  "options": [
+   "A murder",
+   "A parliament",
+   "A gaggle",
+   "A pod"
+  ],
+  "a": 0,
+  "d": "medium"
+ },
+ "247": {
+  "cat": "animals",
+  "q": "What is a female deer called?",
+  "options": [
+   "Mare",
+   "Doe",
+   "Ewe",
+   "Sow"
+  ],
+  "a": 1,
+  "d": "medium"
+ },
+ "249": {
+  "cat": "animals",
+  "q": "Which is the most venomous land snake in the world?",
+  "options": [
+   "King cobra",
+   "Black mamba",
+   "Inland taipan",
+   "Eastern brown"
+  ],
+  "a": 2,
+  "d": "medium"
+ },
+ "260": {
+  "cat": "tech",
+  "q": "Which company developed ChatGPT?",
+  "options": [
+   "Google",
+   "OpenAI",
+   "Meta",
+   "Anthropic"
+  ],
+  "a": 1,
+  "d": "easy"
+ }
+};
+  const NEW = [
+    {"cat":"sports","q":"Which team won the first men's Cricket World Cup in 1975?","options":["West Indies","Australia","England","India"],"a":0,"d":"hard"},
+    {"cat":"sports","q":"In darts, what is the highest possible checkout finishing on a double or bull?","options":["160","167","180","170"],"a":3,"d":"hard"},
+    {"cat":"sports","q":"Which mare won three straight Melbourne Cups from 2003 to 2005?","options":["Winx","Black Caviar","Makybe Diva","Phar Lap"],"a":2,"d":"hard"},
+    {"cat":"sports","q":"Which country hosted the first FIFA World Cup in 1930?","options":["Brazil","Uruguay","Italy","France"],"a":1,"d":"hard"},
+    {"cat":"sports","q":"Who won tennis's 'Golden Slam' (all four majors plus Olympic gold) in 1988?","options":["Martina Navratilova","Steffi Graf","Monica Seles","Chris Evert"],"a":1,"d":"hard"},
+    {"cat":"sports","q":"How long is a cricket pitch from stumps to stumps?","options":["22 yards","20 yards","24 yards","25 yards"],"a":0,"d":"hard"},
+    {"cat":"sports","q":"Australia II's 1983 America's Cup win ended which nation's 132-year hold on it?","options":["Great Britain","New Zealand","France","USA"],"a":3,"d":"hard"},
+    {"cat":"sports","q":"Muhammad Ali was born with what name?","options":["Joe Louis","Sonny Liston","Cassius Clay","Jack Johnson"],"a":2,"d":"hard"},
+    {"cat":"sports","q":"The 'Fosbury Flop' is a technique in which event?","options":["Pole vault","Long jump","High jump","Diving"],"a":2,"d":"hard"},
+    {"cat":"sports","q":"Which Australian won the 1980 Formula 1 World Championship?","options":["Jack Brabham","Alan Jones","Mark Webber","Daniel Ricciardo"],"a":1,"d":"hard"},
+    {"cat":"sports","q":"How high off the ground is a regulation basketball hoop?","options":["3.05 m","2.85 m","3.25 m","3.50 m"],"a":0,"d":"hard"},
+    {"cat":"sports","q":"How many players per team are in the pool at once in water polo?","options":["5","6","8","7"],"a":3,"d":"hard"},
+    {"cat":"sports","q":"How many points is a goal worth in AFL?","options":["1","3","5","6"],"a":3,"d":"easy"},
+    {"cat":"sports","q":"The Boxing Day Test at the MCG is played in which sport?","options":["AFL","Rugby league","Cricket","Tennis"],"a":2,"d":"easy"},
+    {"cat":"sports","q":"How many players per team are on the court in basketball?","options":["4","5","6","7"],"a":1,"d":"easy"},
+    {"cat":"sports","q":"In which sport would you hope to hit a 'hole in one'?","options":["Golf","Tennis","Bowls","Cricket"],"a":0,"d":"easy"},
+    {"cat":"sports","q":"The Stanley Cup is the top prize in which sport?","options":["Ice hockey","Baseball","Basketball","Lacrosse"],"a":0,"d":"medium"},
+    {"cat":"sports","q":"Which Australian city hosted the 1956 Summer Olympics?","options":["Sydney","Brisbane","Adelaide","Melbourne"],"a":3,"d":"medium"},
+    {"cat":"sports","q":"What was Don Bradman's career Test batting average?","options":["89.94","100.94","99.94","96.14"],"a":2,"d":"medium"},
+    {"cat":"sports","q":"Which golf major is played every year at Augusta National?","options":["The Open","The Masters","US Open","US PGA"],"a":1,"d":"medium"},
+    {"cat":"history","q":"Which Roman emperor was in power during the Great Fire of Rome in AD 64?","options":["Nero","Caligula","Claudius","Tiberius"],"a":0,"d":"hard"},
+    {"cat":"history","q":"The 1854 Eureka Stockade rebellion took place in which goldfields town?","options":["Bendigo","Kalgoorlie","Bathurst","Ballarat"],"a":3,"d":"hard"},
+    {"cat":"history","q":"Which Australian Prime Minister disappeared while swimming in 1967?","options":["John Gorton","William McMahon","Harold Holt","Robert Menzies"],"a":2,"d":"hard"},
+    {"cat":"history","q":"Who was the first Emperor of Rome?","options":["Julius Caesar","Augustus","Nero","Trajan"],"a":1,"d":"hard"},
+    {"cat":"history","q":"Who was the last Tsar of Russia?","options":["Alexander III","Nicholas II","Peter III","Alexander II"],"a":1,"d":"hard"},
+    {"cat":"history","q":"Whose expedition was the first to circumnavigate the globe?","options":["Ferdinand Magellan","Christopher Columbus","Vasco da Gama","Francis Drake"],"a":0,"d":"hard"},
+    {"cat":"history","q":"In which year did Japanese aircraft first bomb Darwin?","options":["1940","1941","1943","1942"],"a":3,"d":"hard"},
+    {"cat":"history","q":"Before Canberra, which city was the seat of Australia's federal parliament?","options":["Sydney","Adelaide","Melbourne","Brisbane"],"a":2,"d":"hard"},
+    {"cat":"history","q":"In 1893, which became the first self-governing country to give women the vote?","options":["Australia","United Kingdom","New Zealand","Finland"],"a":2,"d":"hard"},
+    {"cat":"history","q":"Bushranger Ned Kelly was hanged in which city?","options":["Sydney","Melbourne","Ballarat","Beechworth"],"a":1,"d":"hard"},
+    {"cat":"history","q":"In which year did the Sydney Harbour Bridge open?","options":["1932","1923","1938","1945"],"a":0,"d":"hard"},
+    {"cat":"history","q":"What was the code name of the first atomic bomb test in 1945?","options":["Manhattan","Fat Man","Little Boy","Trinity"],"a":3,"d":"hard"},
+    {"cat":"history","q":"The Gallipoli landing is remembered on which Australian day?","options":["Australia Day","Remembrance Day","Boxing Day","Anzac Day"],"a":3,"d":"easy"},
+    {"cat":"history","q":"The Colosseum is in which city?","options":["Athens","Paris","Rome","Istanbul"],"a":2,"d":"easy"},
+    {"cat":"history","q":"Which US President gave the Gettysburg Address?","options":["George Washington","Abraham Lincoln","Thomas Jefferson","Theodore Roosevelt"],"a":1,"d":"easy"},
+    {"cat":"history","q":"Which country gave the Statue of Liberty to the USA?","options":["France","Britain","Spain","Italy"],"a":0,"d":"easy"},
+    {"cat":"history","q":"Which Australian PM was dismissed by the Governor-General in 1975?","options":["Gough Whitlam","Malcolm Fraser","Bob Hawke","John Gorton"],"a":0,"d":"medium"},
+    {"cat":"history","q":"Which treaty formally ended World War I with Germany?","options":["Treaty of Paris","Treaty of Ghent","Treaty of Utrecht","Treaty of Versailles"],"a":3,"d":"medium"},
+    {"cat":"history","q":"Howard Carter discovered which pharaoh's tomb in 1922?","options":["Ramesses II","Cleopatra","Tutankhamun","Khufu"],"a":2,"d":"medium"},
+    {"cat":"history","q":"Which ship did James Cook command on his 1770 voyage to Australia?","options":["HMS Resolution","HMS Endeavour","HMS Bounty","HMS Beagle"],"a":1,"d":"medium"},
+    {"cat":"geo","q":"What is the capital of Turkey?","options":["Ankara","Istanbul","Izmir","Antalya"],"a":0,"d":"hard"},
+    {"cat":"geo","q":"What is the capital of Vietnam?","options":["Ho Chi Minh City","Da Nang","Hue","Hanoi"],"a":3,"d":"hard"},
+    {"cat":"geo","q":"Lake Titicaca sits on the border of Peru and which country?","options":["Chile","Ecuador","Bolivia","Colombia"],"a":2,"d":"hard"},
+    {"cat":"geo","q":"What is the capital of Morocco?","options":["Casablanca","Rabat","Marrakesh","Fez"],"a":1,"d":"hard"},
+    {"cat":"geo","q":"Which country has the longest coastline in the world?","options":["Australia","Canada","Russia","Indonesia"],"a":1,"d":"hard"},
+    {"cat":"geo","q":"Mount Kilimanjaro is in which country?","options":["Tanzania","Kenya","Uganda","Ethiopia"],"a":0,"d":"hard"},
+    {"cat":"geo","q":"What is the capital of Switzerland?","options":["Zurich","Geneva","Basel","Bern"],"a":3,"d":"hard"},
+    {"cat":"geo","q":"Which river flows through Baghdad?","options":["Euphrates","Jordan","Tigris","Nile"],"a":2,"d":"hard"},
+    {"cat":"geo","q":"The historic city of Timbuktu is in which country?","options":["Niger","Chad","Mali","Morocco"],"a":2,"d":"hard"},
+    {"cat":"geo","q":"The Atacama Desert lies mostly in which country?","options":["Peru","Chile","Argentina","Mexico"],"a":1,"d":"hard"},
+    {"cat":"geo","q":"What is the capital of Nigeria?","options":["Abuja","Lagos","Kano","Ibadan"],"a":0,"d":"hard"},
+    {"cat":"geo","q":"What is the longest continental mountain range in the world?","options":["Rocky Mountains","Himalayas","Great Dividing Range","Andes"],"a":3,"d":"hard"},
+    {"cat":"geo","q":"The Great Barrier Reef lies off the coast of which state?","options":["New South Wales","Western Australia","Northern Territory","Queensland"],"a":3,"d":"easy"},
+    {"cat":"geo","q":"Which sea lies between Australia and New Zealand?","options":["Coral Sea","Timor Sea","Tasman Sea","Arafura Sea"],"a":2,"d":"easy"},
+    {"cat":"geo","q":"Bangkok is the capital of which country?","options":["Vietnam","Thailand","Malaysia","Cambodia"],"a":1,"d":"easy"},
+    {"cat":"geo","q":"Mount Everest is in which mountain range?","options":["Himalayas","Andes","Alps","Rockies"],"a":0,"d":"easy"},
+    {"cat":"geo","q":"What is the capital of Brazil?","options":["Brasília","Rio de Janeiro","São Paulo","Salvador"],"a":0,"d":"medium"},
+    {"cat":"geo","q":"Which strait separates mainland Australia from Tasmania?","options":["Torres Strait","Cook Strait","Bering Strait","Bass Strait"],"a":3,"d":"medium"},
+    {"cat":"geo","q":"Which is the most populous country in Africa?","options":["Egypt","Ethiopia","Nigeria","South Africa"],"a":2,"d":"medium"},
+    {"cat":"geo","q":"What is the world's largest island that isn't a continent?","options":["New Guinea","Greenland","Borneo","Madagascar"],"a":1,"d":"medium"},
+    {"cat":"maths","q":"A price goes up 20%, then down 20%. Overall change?","options":["−4%","0%","+4%","−2%"],"a":0,"d":"hard"},
+    {"cat":"maths","q":"What is 99 × 99?","options":["9081","9801","9901","9810"],"a":1,"d":"hard"},
+    {"cat":"maths","q":"How many times is the digit 1 written when you count from 1 to 20?","options":["10","11","12","13"],"a":2,"d":"hard"},
+    {"cat":"maths","q":"A bat and ball cost $1.10. The bat costs $1 more than the ball. Ball price?","options":["10c","15c","1c","5c"],"a":3,"d":"hard"},
+    {"cat":"maths","q":"What is 15% of 15% of 400?","options":["9","60","90","6"],"a":0,"d":"hard"},
+    {"cat":"maths","q":"What is the sum of the first 10 odd numbers?","options":["99","100","110","121"],"a":1,"d":"hard"},
+    {"cat":"maths","q":"You drive there at 60 km/h and back at 40 km/h. Average speed for the trip?","options":["50 km/h","45 km/h","48 km/h","52 km/h"],"a":2,"d":"hard"},
+    {"cat":"maths","q":"How many squares of any size are on a 3×3 grid?","options":["9","13","16","14"],"a":3,"d":"hard"},
+    {"cat":"maths","q":"What is the last digit of 7¹⁰⁰?","options":["1","3","7","9"],"a":0,"d":"hard"},
+    {"cat":"maths","q":"5 machines make 5 widgets in 5 min. How long for 100 machines to make 100?","options":["100 minutes","5 minutes","20 minutes","1 minute"],"a":1,"d":"hard"},
+    {"cat":"maths","q":"10 people each shake hands with every other person once. How many handshakes?","options":["90","100","45","50"],"a":2,"d":"hard"},
+    {"cat":"maths","q":"A clock reads 3:15. What is the angle between the hands?","options":["0°","15°","22.5°","7.5°"],"a":3,"d":"hard"},
+    {"cat":"maths","q":"What is 9 × 6?","options":["54","48","56","63"],"a":0,"d":"easy"},
+    {"cat":"maths","q":"How many minutes are in 3 hours?","options":["120","180","150","300"],"a":1,"d":"easy"},
+    {"cat":"maths","q":"What is 50% of 64?","options":["16","28","32","34"],"a":2,"d":"easy"},
+    {"cat":"maths","q":"How many centimetres are in 2 metres?","options":["20","2000","120","200"],"a":3,"d":"easy"},
+    {"cat":"maths","q":"What is 16 × 25?","options":["400","350","375","425"],"a":0,"d":"medium"},
+    {"cat":"maths","q":"What is 1/3 + 1/6?","options":["2/9","1/2","1/9","2/3"],"a":1,"d":"medium"},
+    {"cat":"maths","q":"A $40 meal plus a 15% tip. Total?","options":["$44","$45","$46","$48"],"a":2,"d":"medium"},
+    {"cat":"maths","q":"What is 3.6 ÷ 0.4?","options":["0.9","90","1.44","9"],"a":3,"d":"medium"},
+    {"cat":"advmaths","q":"What is the derivative of ln(x²)?","options":["1/x²","2/x","2ln(x)","1/(2x)"],"a":1,"d":"hard"},
+    {"cat":"advmaths","q":"What is the integral of x² from 0 to 1?","options":["1/2","1","1/3","2/3"],"a":2,"d":"hard"},
+    {"cat":"advmaths","q":"How many ways can you choose 3 people from a group of 6?","options":["120","18","216","20"],"a":3,"d":"hard"},
+    {"cat":"advmaths","q":"What is i to the power of 2026?","options":["−1","1","i","−i"],"a":0,"d":"hard"},
+    {"cat":"advmaths","q":"What is log₂(1/8)?","options":["3","−3","1/3","−1/3"],"a":1,"d":"hard"},
+    {"cat":"advmaths","q":"What is the derivative of x·eˣ?","options":["eˣ","xeˣ","(x + 1)eˣ","(x − 1)eˣ"],"a":2,"d":"hard"},
+    {"cat":"advmaths","q":"Flip 3 fair coins. Probability of at least one head?","options":["1/2","3/4","3/8","7/8"],"a":3,"d":"hard"},
+    {"cat":"advmaths","q":"The interior angles of a decagon add up to?","options":["1440°","1800°","1260°","1620°"],"a":0,"d":"hard"},
+    {"cat":"advmaths","q":"What is the limit of sin(x)/x as x → 0?","options":["0","1","∞","Undefined"],"a":1,"d":"hard"},
+    {"cat":"advmaths","q":"Fibonacci starts 1, 1, 2, 3… What is the 10th term?","options":["34","89","55","44"],"a":2,"d":"hard"},
+    {"cat":"advmaths","q":"How many distinct ways can you arrange the letters of LEVEL?","options":["60","120","20","30"],"a":3,"d":"hard"},
+    {"cat":"advmaths","q":"Roll two dice. Probability the total is 8?","options":["5/36","1/6","1/9","7/36"],"a":0,"d":"hard"},
+    {"cat":"advmaths","q":"What is 4! (four factorial)?","options":["16","24","12","10"],"a":1,"d":"easy"},
+    {"cat":"advmaths","q":"What is the derivative of 5x?","options":["5x","x","5","0"],"a":2,"d":"easy"},
+    {"cat":"advmaths","q":"What is log₂(8)?","options":["4","2","16","3"],"a":3,"d":"easy"},
+    {"cat":"advmaths","q":"What is π to two decimal places?","options":["3.14","3.12","3.16","3.41"],"a":0,"d":"easy"},
+    {"cat":"advmaths","q":"What is e^(iπ) + 1?","options":["1","0","−1","2"],"a":1,"d":"medium"},
+    {"cat":"advmaths","q":"What is the derivative of cos(x)?","options":["sin(x)","−cos(x)","−sin(x)","tan(x)"],"a":2,"d":"medium"},
+    {"cat":"advmaths","q":"What is the integral of 1/x dx?","options":["−1/x² + C","x⁰ + C","eˣ + C","ln|x| + C"],"a":3,"d":"medium"},
+    {"cat":"advmaths","q":"How many ways can you choose 2 items from 5?","options":["10","20","25","5"],"a":0,"d":"medium"},
+    {"cat":"science","q":"Which element has the chemical symbol W?","options":["Titanium","Vanadium","Tungsten","Yttrium"],"a":2,"d":"hard"},
+    {"cat":"science","q":"What is the most abundant element in Earth's crust by mass?","options":["Silicon","Iron","Aluminium","Oxygen"],"a":3,"d":"hard"},
+    {"cat":"science","q":"Which planet has the shortest day?","options":["Jupiter","Saturn","Mercury","Earth"],"a":0,"d":"hard"},
+    {"cat":"science","q":"Which particle did J.J. Thomson discover in 1897?","options":["Proton","Electron","Neutron","Photon"],"a":1,"d":"hard"},
+    {"cat":"science","q":"Absolute zero is roughly what temperature in °C?","options":["−100°C","−460°C","−273°C","−373°C"],"a":2,"d":"hard"},
+    {"cat":"science","q":"What is the hottest planet in our solar system?","options":["Mercury","Mars","Jupiter","Venus"],"a":3,"d":"hard"},
+    {"cat":"science","q":"Roughly what is the half-life of carbon-14?","options":["5,730 years","573 years","57,300 years","1,000 years"],"a":0,"d":"hard"},
+    {"cat":"science","q":"What is the third most abundant gas in Earth's atmosphere?","options":["Carbon dioxide","Argon","Neon","Helium"],"a":1,"d":"hard"},
+    {"cat":"science","q":"Roughly how fast does sound travel in air at 20°C?","options":["1,235 m/s","3,430 m/s","34 m/s","343 m/s"],"a":3,"d":"hard"},
+    {"cat":"science","q":"What is the smallest bone in the human body?","options":["Stapes","Incus","Malleus","Hyoid"],"a":0,"d":"hard"},
+    {"cat":"science","q":"Which part of a cell builds proteins?","options":["Mitochondria","Ribosome","Nucleus","Vacuole"],"a":1,"d":"hard"},
+    {"cat":"science","q":"What gives plants their green colour?","options":["Glucose","Chloroform","Chlorophyll","Keratin"],"a":2,"d":"easy"},
+    {"cat":"science","q":"Which planet is closest to the Sun?","options":["Venus","Mars","Earth","Mercury"],"a":3,"d":"easy"},
+    {"cat":"science","q":"What do bees collect from flowers to make honey?","options":["Nectar","Pollen","Sap","Water"],"a":0,"d":"easy"},
+    {"cat":"science","q":"At sea level, water boils at what temperature (°C)?","options":["90°","100°","110°","212°"],"a":1,"d":"easy"},
+    {"cat":"science","q":"Which metal is liquid at room temperature?","options":["Gallium","Lead","Mercury","Sodium"],"a":2,"d":"medium"},
+    {"cat":"science","q":"Which blood type is the universal red-cell donor?","options":["AB positive","O positive","A negative","O negative"],"a":3,"d":"medium"},
+    {"cat":"science","q":"Which planet rotates on its side, tilted about 98°?","options":["Uranus","Neptune","Saturn","Venus"],"a":0,"d":"medium"},
+    {"cat":"science","q":"How many chromosomes are in a typical human body cell?","options":["23","46","44","48"],"a":1,"d":"medium"},
+    {"cat":"movies","q":"Which film won the first ever Oscar for Best Animated Feature?","options":["Shrek","Monsters, Inc.","Spirited Away","Ice Age"],"a":0,"d":"hard"},
+    {"cat":"movies","q":"Who directed the Oscar-winning film Parasite (2019)?","options":["Park Chan-wook","Bong Joon-ho","Kim Jee-woon","Lee Chang-dong"],"a":1,"d":"hard"},
+    {"cat":"movies","q":"What is the name of the hotel in The Shining (1980)?","options":["The Stanley","The Bates","The Overlook","The Cecil"],"a":2,"d":"hard"},
+    {"cat":"movies","q":"Who played the villain Hela in Thor: Ragnarok?","options":["Tessa Thompson","Rose Byrne","Elizabeth Debicki","Cate Blanchett"],"a":3,"d":"hard"},
+    {"cat":"movies","q":"In Titanic, the 'Heart of the Ocean' necklace features what kind of gem?","options":["Blue diamond","Sapphire","Emerald","Black pearl"],"a":0,"d":"hard"},
+    {"cat":"movies","q":"In Friends, what is the name of Joey's stuffed penguin?","options":["Waddles","Hugsy","Pengy","Mr. Flippers"],"a":1,"d":"hard"},
+    {"cat":"movies","q":"What was Pixar's second feature film, after Toy Story?","options":["Monsters, Inc.","Toy Story 2","A Bug's Life","Finding Nemo"],"a":2,"d":"hard"},
+    {"cat":"movies","q":"What is the name of the spaceship in Alien (1979)?","options":["Sulaco","Prometheus","Covenant","Nostromo"],"a":3,"d":"hard"},
+    {"cat":"movies","q":"Who composed the score for Christopher Nolan's Interstellar?","options":["Hans Zimmer","John Williams","Ludwig Göransson","Howard Shore"],"a":0,"d":"hard"},
+    {"cat":"movies","q":"In Game of Thrones, what is the name of Arya Stark's sword?","options":["Longclaw","Needle","Oathkeeper","Ice"],"a":1,"d":"hard"},
+    {"cat":"movies","q":"In the TV series Severance, what is the name of the company?","options":["Hooli","Initech","Lumon Industries","Vought International"],"a":2,"d":"hard"},
+    {"cat":"movies","q":"The Office (US) mostly takes place at Dunder Mifflin's branch in which city?","options":["Stamford","Nashua","Utica","Scranton"],"a":3,"d":"hard"},
+    {"cat":"movies","q":"Which Australian directed Mad Max: Fury Road (2015)?","options":["George Miller","Baz Luhrmann","Peter Weir","Phillip Noyce"],"a":0,"d":"medium"},
+    {"cat":"movies","q":"Who played Patrick Bateman in American Psycho (2000)?","options":["Jared Leto","Christian Bale","Matthew McConaughey","Ethan Hawke"],"a":1,"d":"medium"},
+    {"cat":"movies","q":"How many Infinity Stones are there in the Marvel films?","options":["5","7","6","8"],"a":2,"d":"medium"},
+    {"cat":"movies","q":"Stranger Things is set in which fictional town?","options":["Derry","Haddonfield","Twin Peaks","Hawkins"],"a":3,"d":"medium"},
+    {"cat":"movies","q":"In The Lion King (1994), what is the name of the cub who grows up to be king?","options":["Simba","Mufasa","Scar","Kovu"],"a":0,"d":"easy"},
+    {"cat":"movies","q":"Who is the headmaster of Hogwarts for most of the Harry Potter films?","options":["Severus Snape","Albus Dumbledore","Minerva McGonagall","Rubeus Hagrid"],"a":1,"d":"easy"},
+    {"cat":"movies","q":"Which Australian actor played Wolverine in the X-Men films?","options":["Russell Crowe","Eric Bana","Hugh Jackman","Chris Hemsworth"],"a":2,"d":"easy"},
+    {"cat":"movies","q":"What is Jennifer Lawrence's character called in The Hunger Games?","options":["Tris Prior","Bella Swan","Effie Trinket","Katniss Everdeen"],"a":3,"d":"easy"},
+    {"cat":"music","q":"Which band's debut album was 'Pablo Honey' (1993)?","options":["Radiohead","Coldplay","Muse","Blur"],"a":0,"d":"hard"},
+    {"cat":"music","q":"Which Australian band released the 1987 album 'Diesel and Dust'?","options":["INXS","Midnight Oil","Cold Chisel","Hunters & Collectors"],"a":1,"d":"hard"},
+    {"cat":"music","q":"Which AC/DC singer died in 1980, before Brian Johnson joined?","options":["Dave Evans","Jimmy Barnes","Bon Scott","Malcolm Young"],"a":2,"d":"hard"},
+    {"cat":"music","q":"Who released the 2012 album 'Channel Orange'?","options":["Childish Gambino","Miguel","The Weeknd","Frank Ocean"],"a":3,"d":"hard"},
+    {"cat":"music","q":"Who topped Triple J's Hottest 100 of 2017?","options":["Kendrick Lamar","Amy Shark","Gang of Youths","Lorde"],"a":0,"d":"hard"},
+    {"cat":"music","q":"What was Beyoncé's debut solo studio album?","options":["B'Day","Dangerously in Love","I Am... Sasha Fierce","4"],"a":1,"d":"hard"},
+    {"cat":"music","q":"What is Lady Gaga's real first name?","options":["Joanne","Christina","Stefani","Alicia"],"a":2,"d":"hard"},
+    {"cat":"music","q":"Tame Impala is the musical project of which Australian?","options":["Kevin Mitchell","Matt Corby","Nick Allbrook","Kevin Parker"],"a":3,"d":"hard"},
+    {"cat":"music","q":"Which Daft Punk album includes 'Get Lucky'?","options":["Random Access Memories","Discovery","Homework","Human After All"],"a":0,"d":"hard"},
+    {"cat":"music","q":"Fleetwood Mac's song 'Dreams' is from which album?","options":["Tusk","Rumours","Tango in the Night","Mirage"],"a":1,"d":"hard"},
+    {"cat":"music","q":"'Uptown Funk' (2014) was released by which artist, featuring Bruno Mars?","options":["Calvin Harris","Pharrell Williams","Mark Ronson","David Guetta"],"a":2,"d":"hard"},
+    {"cat":"music","q":"Who topped Triple J's Hottest 100 of 2021 with a Tame Impala cover?","options":["Spacey Jane","Ocean Alley","Gang of Youths","The Wiggles"],"a":3,"d":"hard"},
+    {"cat":"music","q":"Which band had the hit 'Mr. Brightside'?","options":["The Killers","The Strokes","Kings of Leon","Franz Ferdinand"],"a":0,"d":"medium"},
+    {"cat":"music","q":"Which NZ singer featured on Gotye's 'Somebody That I Used to Know'?","options":["Lorde","Kimbra","Ladyhawke","Brooke Fraser"],"a":1,"d":"medium"},
+    {"cat":"music","q":"Who released the 2012 album 'Born to Die'?","options":["Lorde","Halsey","Lana Del Rey","Marina"],"a":2,"d":"medium"},
+    {"cat":"music","q":"Rihanna was born in which country?","options":["Jamaica","Trinidad and Tobago","Bahamas","Barbados"],"a":3,"d":"medium"},
+    {"cat":"music","q":"Kurt Cobain was the frontman of which band?","options":["Nirvana","Pearl Jam","Foo Fighters","Soundgarden"],"a":0,"d":"easy"},
+    {"cat":"music","q":"ABBA come from which country?","options":["Norway","Sweden","Denmark","Finland"],"a":1,"d":"easy"},
+    {"cat":"music","q":"How many Spice Girls were there?","options":["4","3","5","6"],"a":2,"d":"easy"},
+    {"cat":"music","q":"Elvis Presley is known as the 'King of' what?","options":["Pop","Soul","Country","Rock and Roll"],"a":3,"d":"easy"},
+    {"cat":"pop","q":"Who won the first season of Australian Idol in 2003?","options":["Guy Sebastian","Shannon Noll","Anthony Callea","Damien Leith"],"a":0,"d":"hard"},
+    {"cat":"pop","q":"What does the 'GIF' in GIF image stand for?","options":["Graphic Image File","Graphics Interchange Format","General Image Format","Graphical Internet File"],"a":1,"d":"hard"},
+    {"cat":"pop","q":"In what year was Fortnite's Battle Royale mode released?","options":["2015","2016","2017","2018"],"a":2,"d":"hard"},
+    {"cat":"pop","q":"What was the name of Twitter's bird logo?","options":["Tweety","Jack","Birdie","Larry"],"a":3,"d":"hard"},
+    {"cat":"pop","q":"In Minecraft, which block is used to build a Nether portal?","options":["Obsidian","Bedrock","Netherrack","Diamond"],"a":0,"d":"hard"},
+    {"cat":"pop","q":"The 2014 Ice Bucket Challenge raised money for research into which disease?","options":["Multiple sclerosis","Motor neurone disease","Parkinson's disease","Cystic fibrosis"],"a":1,"d":"hard"},
+    {"cat":"pop","q":"Which app was originally launched under the name 'Picaboo'?","options":["Instagram","Pinterest","Snapchat","Tumblr"],"a":2,"d":"hard"},
+    {"cat":"pop","q":"What was internet-famous Grumpy Cat's real name?","options":["Lil Bub","Maru","Colonel Meow","Tardar Sauce"],"a":3,"d":"hard"},
+    {"cat":"pop","q":"Which Pokémon is number 001 in the National Pokédex?","options":["Bulbasaur","Pikachu","Charmander","Mew"],"a":0,"d":"hard"},
+    {"cat":"pop","q":"What is the made-up language spoken in The Sims called?","options":["Simspeak","Simlish","Plumbob","Simanese"],"a":1,"d":"hard"},
+    {"cat":"pop","q":"What was the title of the first video ever uploaded to YouTube?","options":["Charlie bit my finger","Evolution of Dance","Hello YouTube","Me at the zoo"],"a":3,"d":"hard"},
+    {"cat":"pop","q":"Which company bought Instagram in 2012?","options":["Facebook","Twitter","Google","Microsoft"],"a":0,"d":"medium"},
+    {"cat":"pop","q":"In the game Among Us, what are the saboteur players called?","options":["Traitors","Impostors","Infected","Spies"],"a":1,"d":"medium"},
+    {"cat":"pop","q":"Which Kardashian founded the shapewear brand SKIMS?","options":["Khloé","Kourtney","Kim","Kylie"],"a":2,"d":"medium"},
+    {"cat":"pop","q":"Which South Korean singer had the 2012 viral hit 'Gangnam Style'?","options":["Rain","G-Dragon","Jungkook","PSY"],"a":3,"d":"medium"},
+    {"cat":"pop","q":"What is the name of Bluey's little sister?","options":["Bingo","Coco","Muffin","Socks"],"a":0,"d":"easy"},
+    {"cat":"pop","q":"Who co-founded Facebook in 2004?","options":["Jack Dorsey","Mark Zuckerberg","Evan Spiegel","Larry Page"],"a":1,"d":"easy"},
+    {"cat":"pop","q":"Which 2016 mobile game had people catching creatures in real-world locations?","options":["Candy Crush","Clash of Clans","Pokémon Go","Angry Birds"],"a":2,"d":"easy"},
+    {"cat":"food","q":"Which grape is NOT one of Champagne's three main varieties?","options":["Chardonnay","Pinot Noir","Sauvignon Blanc","Pinot Meunier"],"a":2,"d":"hard"},
+    {"cat":"food","q":"Manchego cheese comes from which country?","options":["Spain","Portugal","Italy","Greece"],"a":0,"d":"hard"},
+    {"cat":"food","q":"Which spirit is the base of a classic Negroni?","options":["Vodka","Gin","Whisky","Rum"],"a":1,"d":"hard"},
+    {"cat":"food","q":"Profiteroles are made from which type of pastry?","options":["Filo","Puff","Shortcrust","Choux"],"a":3,"d":"hard"},
+    {"cat":"food","q":"Most 'wasabi' served outside Japan is mainly made from what?","options":["Horseradish","Green chilli","Pickled ginger","Avocado"],"a":0,"d":"hard"},
+    {"cat":"food","q":"Which nut goes in a traditional pesto alla genovese?","options":["Walnuts","Pine nuts","Almonds","Cashews"],"a":1,"d":"hard"},
+    {"cat":"food","q":"Pimm's No. 1 Cup is a liqueur based on which spirit?","options":["Brandy","Rum","Gin","Whisky"],"a":2,"d":"hard"},
+    {"cat":"food","q":"Halloumi cheese originated in which country?","options":["Greece","Turkey","Lebanon","Cyprus"],"a":3,"d":"hard"},
+    {"cat":"food","q":"The umami taste is mainly triggered by which compound?","options":["Sucrose","Capsaicin","Citric acid","Glutamate"],"a":3,"d":"hard"},
+    {"cat":"food","q":"By US law, bourbon must be at least 51% which grain?","options":["Corn","Rye","Barley","Wheat"],"a":0,"d":"hard"},
+    {"cat":"food","q":"Which fish is an ingredient in Worcestershire sauce?","options":["Sardine","Anchovy","Tuna","Mackerel"],"a":1,"d":"hard"},
+    {"cat":"food","q":"The Granny Smith apple was first grown in which country?","options":["New Zealand","England","Australia","USA"],"a":2,"d":"hard"},
+    {"cat":"food","q":"Paella is a famous dish from which country?","options":["Mexico","Italy","Portugal","Spain"],"a":3,"d":"easy"},
+    {"cat":"food","q":"Popcorn is made from which grain?","options":["Corn","Wheat","Rice","Barley"],"a":0,"d":"easy"},
+    {"cat":"food","q":"What is a lamington coated in?","options":["Icing sugar","Chocolate and coconut","Caramel and nuts","Jam and cream"],"a":1,"d":"easy"},
+    {"cat":"food","q":"Sake is a traditional drink from which country?","options":["China","Korea","Japan","Thailand"],"a":2,"d":"easy"},
+    {"cat":"food","q":"Which spice comes from the stigma of a crocus flower?","options":["Turmeric","Paprika","Cardamom","Saffron"],"a":3,"d":"medium"},
+    {"cat":"food","q":"Tequila is distilled from which plant?","options":["Blue agave","Sugar cane","Cactus pear","Yucca"],"a":0,"d":"medium"},
+    {"cat":"food","q":"Which fizzy drink is made by fermenting sweet tea with a SCOBY?","options":["Kefir","Kombucha","Kvass","Ginger beer"],"a":1,"d":"medium"},
+    {"cat":"food","q":"Traditional Italian gnocchi are usually made mainly from what?","options":["Rice","Semolina","Potato","Chickpeas"],"a":2,"d":"medium"},
+    {"cat":"aussie","q":"Which Australian colony was the first to give women the vote?","options":["South Australia","New South Wales","Victoria","Western Australia"],"a":0,"d":"hard"},
+    {"cat":"aussie","q":"Which strait separates Australia from Papua New Guinea?","options":["Bass Strait","Cook Strait","Torres Strait","Malacca Strait"],"a":2,"d":"hard"},
+    {"cat":"aussie","q":"Who was Australia's first Prime Minister?","options":["Alfred Deakin","Henry Parkes","Joseph Lyons","Edmund Barton"],"a":3,"d":"hard"},
+    {"cat":"aussie","q":"Which opera singer appears on the Australian $100 note?","options":["Nellie Melba","Joan Sutherland","June Bronhill","Joan Carden"],"a":0,"d":"hard"},
+    {"cat":"aussie","q":"The Barossa Valley wine region is in which state?","options":["Victoria","New South Wales","South Australia","Western Australia"],"a":2,"d":"hard"},
+    {"cat":"aussie","q":"In what year did Australia switch to decimal currency?","options":["1956","1972","1976","1966"],"a":3,"d":"hard"},
+    {"cat":"aussie","q":"Which architect designed the Sydney Opera House?","options":["Harry Seidler","Jørn Utzon","Frank Gehry","Renzo Piano"],"a":1,"d":"hard"},
+    {"cat":"aussie","q":"Who won the competition to design Canberra's city plan?","options":["Harry Seidler","John Monash","Walter Burley Griffin","Robin Boyd"],"a":2,"d":"hard"},
+    {"cat":"aussie","q":"Which state was originally called Van Diemen's Land?","options":["Victoria","South Australia","Western Australia","Tasmania"],"a":3,"d":"hard"},
+    {"cat":"aussie","q":"How many states does Australia have?","options":["6","5","7","8"],"a":0,"d":"easy"},
+    {"cat":"aussie","q":"What is the name of Australia's national anthem?","options":["Waltzing Matilda","Advance Australia Fair","I Am Australian","Down Under"],"a":1,"d":"easy"},
+    {"cat":"aussie","q":"Hobart is the capital of which state?","options":["Victoria","South Australia","Tasmania","Queensland"],"a":2,"d":"easy"},
+    {"cat":"aussie","q":"Which ocean lies off Australia's east coast?","options":["Indian","Southern","Atlantic","Pacific"],"a":3,"d":"easy"},
+    {"cat":"aussie","q":"The kids' show Bluey is set in which city?","options":["Brisbane","Sydney","Melbourne","Perth"],"a":0,"d":"medium"},
+    {"cat":"aussie","q":"Which is Australia's largest state by area?","options":["Queensland","Western Australia","Northern Territory","New South Wales"],"a":1,"d":"medium"},
+    {"cat":"aussie","q":"What is the highest mountain on mainland Australia?","options":["Mount Bogong","Mount Buller","Mount Kosciuszko","Mount Wellington"],"a":2,"d":"medium"},
+    {"cat":"aussie","q":"What is Australia's national floral emblem?","options":["Waratah","Kangaroo paw","Sturt's desert pea","Golden wattle"],"a":3,"d":"medium"},
+    {"cat":"animals","q":"What colour is a polar bear's skin?","options":["Black","White","Pink","Grey"],"a":0,"d":"hard"},
+    {"cat":"animals","q":"What is a baby echidna called?","options":["Kit","Puggle","Cub","Pup"],"a":1,"d":"hard"},
+    {"cat":"animals","q":"What is the closest living relative of the hippopotamus?","options":["Pig","Elephant","Whale","Rhinoceros"],"a":2,"d":"hard"},
+    {"cat":"animals","q":"A 'flamboyance' is a group of which bird?","options":["Peacocks","Parrots","Pelicans","Flamingos"],"a":3,"d":"hard"},
+    {"cat":"animals","q":"Which mammal has the longest pregnancy?","options":["Elephant","Blue whale","Giraffe","Rhinoceros"],"a":0,"d":"hard"},
+    {"cat":"animals","q":"What is the national animal of Scotland?","options":["Red deer","Unicorn","Lion","Golden eagle"],"a":1,"d":"hard"},
+    {"cat":"animals","q":"Which bird is the fastest in a hunting dive?","options":["Golden eagle","Bald eagle","Peregrine falcon","Swift"],"a":2,"d":"hard"},
+    {"cat":"animals","q":"What is a male duck called?","options":["Cob","Gander","Tom","Drake"],"a":3,"d":"hard"},
+    {"cat":"animals","q":"Which of these animals is a marsupial?","options":["Tasmanian devil","Dingo","Flying fox","Echidna"],"a":0,"d":"hard"},
+    {"cat":"animals","q":"How many chambers does a crocodile's heart have?","options":["2","4","3","5"],"a":1,"d":"hard"},
+    {"cat":"animals","q":"What word describes animals most active at dawn and dusk?","options":["Nocturnal","Diurnal","Crepuscular","Matutinal"],"a":2,"d":"hard"},
+    {"cat":"animals","q":"The kookaburra belongs to which bird family?","options":["Crow","Parrot","Owl","Kingfisher"],"a":3,"d":"hard"},
+    {"cat":"animals","q":"What do bees make?","options":["Silk","Honey","Sap","Maple syrup"],"a":1,"d":"easy"},
+    {"cat":"animals","q":"Which animal is known as the 'king of the jungle'?","options":["Tiger","Gorilla","Lion","Elephant"],"a":2,"d":"easy"},
+    {"cat":"animals","q":"Which lizard is famous for changing colour?","options":["Iguana","Gecko","Skink","Chameleon"],"a":3,"d":"easy"},
+    {"cat":"animals","q":"Which living bird lays the largest egg?","options":["Ostrich","Emu","Cassowary","Albatross"],"a":0,"d":"medium"},
+    {"cat":"animals","q":"Wombats are famous for doing poo in what shape?","options":["Spheres","Cubes","Pyramids","Spirals"],"a":1,"d":"medium"},
+    {"cat":"animals","q":"What is a group of owls called?","options":["A murder","A pride","A parliament","A pod"],"a":2,"d":"medium"},
+    {"cat":"animals","q":"In which of these animals do the males give birth?","options":["Clownfish","Octopus","Penguin","Seahorse"],"a":3,"d":"medium"},
+    {"cat":"tech","q":"Bluetooth is named after what kind of historical figure?","options":["A Roman emperor","A pirate","A Viking king","A Greek god"],"a":2,"d":"hard"},
+    {"cat":"tech","q":"What does 'QR' in QR code stand for?","options":["Quality Read","Quick Reference","Query Result","Quick Response"],"a":3,"d":"hard"},
+    {"cat":"tech","q":"Which company makes Snapdragon phone chips?","options":["Qualcomm","MediaTek","Intel","AMD"],"a":0,"d":"hard"},
+    {"cat":"tech","q":"What was Twitter's original name?","options":["Chirp","twttr","Tweeter","Status"],"a":1,"d":"hard"},
+    {"cat":"tech","q":"Who is often called the first computer programmer?","options":["Alan Turing","Charles Babbage","Ada Lovelace","Grace Hopper"],"a":2,"d":"hard"},
+    {"cat":"tech","q":"Which Australian organisation patented key Wi-Fi technology?","options":["Telstra","ANU","BHP","CSIRO"],"a":3,"d":"hard"},
+    {"cat":"tech","q":"Which language did Brendan Eich create in about 10 days?","options":["JavaScript","Java","PHP","Ruby"],"a":0,"d":"hard"},
+    {"cat":"tech","q":"Minecraft is developed by which studio?","options":["Rockstar","Mojang","Valve","Epic Games"],"a":1,"d":"hard"},
+    {"cat":"tech","q":"Which Nintendo character was originally called 'Jumpman'?","options":["Donkey Kong","Luigi","Mario","Link"],"a":2,"d":"hard"},
+    {"cat":"tech","q":"What does 'SIM' in SIM card stand for?","options":["Secure Internet Module","System Identity Mobile","Subscriber Info Media","Subscriber Identity Module"],"a":3,"d":"hard"},
+    {"cat":"tech","q":"Which company makes Galaxy smartphones?","options":["Samsung","Apple","Google","Sony"],"a":0,"d":"easy"},
+    {"cat":"tech","q":"On Windows, which shortcut copies selected text?","options":["Ctrl+V","Ctrl+C","Ctrl+X","Ctrl+Z"],"a":1,"d":"easy"},
+    {"cat":"tech","q":"Which app is known for photos that disappear after viewing?","options":["Instagram","Pinterest","Snapchat","LinkedIn"],"a":2,"d":"easy"},
+    {"cat":"tech","q":"Which company makes the Xbox?","options":["Sony","Nintendo","Sega","Microsoft"],"a":3,"d":"easy"},
+    {"cat":"tech","q":"What does 'HTML' stand for?","options":["HyperText Markup Language","High Tech Modern Language","HyperText Main Link","Home Tool Markup Language"],"a":0,"d":"medium"},
+    {"cat":"tech","q":"Who invented the World Wide Web?","options":["Vint Cerf","Tim Berners-Lee","Bill Gates","Linus Torvalds"],"a":1,"d":"medium"},
+    {"cat":"tech","q":"What does 'PDF' stand for?","options":["Printable Data File","Public Document File","Portable Document Format","Print Display Format"],"a":2,"d":"medium"},
+    {"cat":"tech","q":"What does 'IP' in IP address stand for?","options":["Internal Port","Internet Provider","Information Path","Internet Protocol"],"a":3,"d":"medium"}
+  ];
+  Object.keys(FIX).forEach(i => { if (FIX[i].drop) QUESTIONS[i] = null; else Object.assign(QUESTIONS[i], FIX[i]); });
+  for (let i = QUESTIONS.length - 1; i >= 0; i--) if (!QUESTIONS[i]) QUESTIONS.splice(i, 1);
+  QUESTIONS.push(...NEW);
+})();

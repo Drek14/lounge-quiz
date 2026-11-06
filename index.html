@@ -67,6 +67,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .big{font-size:64px;line-height:1}
 .mults{flex:1;display:grid;grid-template-rows:1fr 1fr 1fr;gap:12px}
+.mults.ten{grid-template-rows:none;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:9px}.mults.ten .mb .x{font-size:32px}.mults.ten .mb{border-radius:16px}
+.mb.used{background:#1a1f33;color:#5b6385;box-shadow:none;border:1px dashed #333b5c}.mb.used .x{text-decoration:line-through;text-decoration-thickness:3px}
 .mb{border:0;font:inherit;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;background:linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 50%,#000));box-shadow:0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .1s,filter .2s}
 .mb .x{font-size:46px;font-weight:900;line-height:1}.mb .w{font-size:14px;opacity:.9}.mb .l{font-size:12px;opacity:.75}
 .mb:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.4)}
@@ -100,6 +102,13 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .hv.on{display:flex}
 /* lobby */
 .lobby{flex-direction:column;gap:1.4vh}
+.setup{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.8vh 2.4vh}
+.setup .sg{display:flex;align-items:center;gap:1vh}.setup .lbl{font-size:1.8vh;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.4vh;gap:.3vh}
+.seg button{appearance:none;border:0;background:none;color:#fff;font:inherit;font-weight:900;font-size:2vh;padding:.8vh 1.8vh;border-radius:999px;cursor:pointer;min-width:5vh}
+.seg button.on{background:var(--accent);color:#111}
+.setup .hint{width:100%;text-align:center;font-size:1.6vh;color:var(--muted);font-weight:700}
+.setup.small .seg button{font-size:1.7vh;padding:.6vh 1.4vh}.setup.small{margin-bottom:1vh}
 .lobbyrow{flex:1;display:flex;gap:1.6vw;min-height:0}
 .hostbar{flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:.4vh;text-align:center}
 .hostbar .hn{display:flex;align-items:center;gap:1.2vh;background:var(--accent);color:#111;font-weight:900;font-size:3.4vh;padding:.8vh 2.6vh .8vh .8vh;border-radius:999px;box-shadow:0 1vh 3vh rgba(255,190,11,.25)}
@@ -144,6 +153,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .preview .ic{font-size:7vh;line-height:1;filter:drop-shadow(0 .5vh 1vh rgba(0,0,0,.4))}
 .preview .nm{font-size:4.2vh;font-weight:900;text-shadow:0 .3vh 1vh rgba(0,0,0,.4);line-height:1}
 .preview .meta{font-size:2.2vh;font-weight:800;opacity:.95;margin-top:.6vh}
+.rulesline{font-size:2.2vh;color:var(--muted);font-weight:800;text-align:center}
+.pcard .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:.6vh}.pcard .col .nm{flex:none}
+.pcard .toks{display:flex;gap:.3vh;flex-wrap:wrap}.pcard .toks i{font-style:normal;font-size:1.4vh;font-weight:900;width:2.3vh;height:2.3vh;display:grid;place-items:center;border-radius:.5vh;background:rgba(255,255,255,.14);color:#fff}.pcard .toks i.u{background:none;color:#4a5170;text-decoration:line-through}
+.ctl .btn.mybtn.usedm{opacity:.25;border-color:transparent;text-decoration:line-through}
 .rules{display:flex;gap:1.4vh;flex-wrap:wrap;justify-content:center}
 .rule{background:var(--card);border:1px solid var(--line);border-radius:2vh;padding:1.6vh 2.6vh;text-align:center;min-width:16vh}
 .rule .x{font-size:4.4vh;font-weight:900}.rule .w{color:var(--good);font-size:2.1vh}.rule .l{color:var(--bad);font-size:1.9vh}
@@ -158,6 +171,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .q{flex-direction:column;gap:1.2vh}
 .timer.h{height:1.3vh;border-radius:1vh}
 .qhead{display:flex;align-items:center;justify-content:space-between;font-size:2vh;color:var(--muted);gap:1vh}
+.dchip.hard{background:rgba(255,77,109,.22);color:var(--bad)}
 .dchip{display:inline-block;padding:.15em .7em;border-radius:999px;font-size:.85em;font-weight:900;margin-left:.5em;background:rgba(46,229,157,.2);color:var(--good);vertical-align:middle}.dchip.medium{background:rgba(255,190,11,.2);color:var(--accent)}
 .qhead .t{font-size:3.4vh;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;min-width:2em;text-align:right}
 .qbody{flex:1;display:flex;gap:1.6vw;min-height:0}
@@ -219,7 +233,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .ctl{display:flex;gap:.8vh;align-items:center;flex:none}
 .ctl .mine{font-size:2vh;color:var(--accent);font-weight:900;white-space:nowrap}.ctl .mine.ok{color:var(--good)}
 .ctl .sep{width:1px;align-self:stretch;background:var(--line);margin:0 .4vh}
-.ctl .btn.mybtn{padding:1.2vh 1.8vh;min-width:6vh;font-weight:900;border:2px solid var(--accent)}
+.ctl .btn.mybtn{padding:1vh 1vh;min-width:4.6vh;font-weight:900;border:2px solid var(--accent)}
 .chip.me{color:#111;background:var(--accent);border-color:var(--accent);font-weight:900}.chip.me.dim{background:var(--card);color:var(--muted);border-color:var(--line)}
 .slot.me{border:2px solid var(--accent);box-shadow:0 0 2vh rgba(255,190,11,.25)}
 .youtag{background:var(--accent);color:#111;border-radius:.5em;padding:0 .4em;margin-right:.4em;font-size:.8em}
@@ -317,6 +331,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
   <div class="stage">
     <div class="hv lobby" id="hv-lobby">
       <div class="hostbar" id="hostbar"></div>
+      <div class="setup" id="setup-lobby"></div>
       <div class="lobbyrow">
         <div class="join">
           <h1>Join on your phone</h1>
@@ -329,8 +344,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
         <div class="slots" id="slots"></div>
       </div>
     </div>
-    <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="catgrid" id="catgrid"></div></div>
-    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>How confident are you? Lock in a multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2>The question appears once everyone has locked in</h2></div>
+    <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="setup small" id="setup-cat"></div><div class="catgrid" id="catgrid"></div></div>
+    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>How confident are you? Lock in a multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2>Greyed numbers are already used · the question appears once everyone has locked in</h2></div>
     <div class="hv q" id="hv-question">
       <div class="timer h"><i id="htbar"></i></div>
       <div class="qhead"><span id="hq-sub"></span><span id="hq-ans"></span><span class="t" id="hq-t"></span></div>
@@ -415,16 +430,37 @@ function buildBank() {
   BANK = QUESTIONS.map((q, i) => ({ ...q, id: 'q' + i }));
   ls.get('lq_photos', []).forEach((p, i) => BANK.push({ cat: 'photo', q: p.q, image: p.img, options: p.options, a: p.a, id: 'p' + i }));
 }
-function freshState(code) { S = { code, phase: 'lobby', players: [], used: [], round: null, roundNo: 0 }; }
+const LEVELS = [['easy', 'Easy'], ['medium', 'Medium'], ['hard', 'Hard'], ['mixed', 'Mixed']], PERPICK = [1, 2, 3, 5];
+const DORDER = { easy: 0, medium: 1, hard: 2 };
+const LENGTHS = [5, 10];
+function defaultSettings() { const d = ls.get('lq_settings', null); return { level: d && d.level || 'mixed', perPick: d && d.perPick || 1, len: d && d.len || 10 }; }
+const multList = (len) => Array.from({ length: len }, (_, i) => i + 1);
+const gameLen = () => sett().len || 10;
+function freshState(code) { S = { code, phase: 'lobby', players: [], used: [], round: null, roundNo: 0, qDone: 0, lastCat: null, settings: defaultSettings() }; }
+const sett = () => S.settings || (S.settings = defaultSettings());
+// questions for a category at the chosen level, falling back to the nearest level if that one has run out
+function poolFor(catId, n) {
+  const lv = sett().level, unused = BANK.filter(q => q.cat === catId && !S.used.includes(q.id));
+  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  if (lv === 'mixed') {
+    const by = { easy: shuffle(unused.filter(q => q.d === 'easy')), medium: shuffle(unused.filter(q => q.d === 'medium')), hard: shuffle(unused.filter(q => q.d === 'hard')) };
+    const out = []; const seq = ['easy', 'medium', 'hard'];
+    for (let i = 0; out.length < n && i < 300; i++) { const k = seq[i % 3]; if (by[k].length) out.push(by[k].shift()); if (!by.easy.length && !by.medium.length && !by.hard.length) break; }
+    return out.sort((a, b) => DORDER[a.d] - DORDER[b.d]);
+  }
+  const t = DORDER[lv], near = shuffle(unused).sort((a, b) => Math.abs(DORDER[a.d] - t) - Math.abs(DORDER[b.d] - t));
+  return near.slice(0, n);
+}
+const levelLeft = (catId) => { const lv = sett().level; return BANK.filter(q => q.cat === catId && !S.used.includes(q.id) && (lv === 'mixed' || q.d === lv)).length; };
 const claimed = () => S.players.filter(p => p.pid);
 const catMeta = (id) => CATEGORIES.find(c => c.id === id);
 const remainingIn = (c) => BANK.filter(q => q.cat === c && !S.used.includes(q.id)).length;
 const currentQ = () => S.round ? BANK.find(q => q.id === S.round.qs[S.round.qIndex]) : null;
 function publicState() {
   const q = currentQ(), show = S.phase === 'reveal' || S.phase === 'scoreboard';
-  return { code: S.code, phase: S.phase, roundNo: S.roundNo, config: CONFIG, hostTime: now(),
-    categories: CATEGORIES.map(c => ({ ...c, remaining: remainingIn(c.id) })),
-    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, answered: p.answer != null, answer: show ? p.answer : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
+  return { code: S.code, phase: S.phase, roundNo: S.roundNo, qDone: S.qDone || 0, lastCat: S.lastCat, settings: sett(), config: { ...CONFIG, multipliers: multList(gameLen()) }, hostTime: now(),
+    categories: CATEGORIES.map(c => ({ ...c, remaining: remainingIn(c.id), atLevel: levelLeft(c.id) })),
+    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], answered: p.answer != null, answer: show ? p.answer : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
     round: S.round ? { catId: S.round.catId, catName: S.round.catName, color: S.round.color, icon: S.round.icon, qIndex: S.round.qIndex, total: S.round.qs.length, deadline: S.round.deadline,
       question: q && S.phase !== 'multiplier' ? { text: q.q, options: q.options, svg: q.svg, image: q.image, d: q.d, correct: show ? q.a : undefined } : null, nextD: q ? q.d : null } : null };
 }
@@ -439,7 +475,7 @@ function addPlayer(name, avatar) {
   if (S.players.length >= CONFIG.maxPlayers) throw new Error('Max ' + CONFIG.maxPlayers + ' players');
   if (S.players.some(p => p.name.toLowerCase() === name.toLowerCase())) throw new Error('That name is taken');
   const i = S.players.length;
-  const p = { id: rid(6), name, avatar: avatar || AVATARS[i % AVATARS.length], color: COLORS[i % COLORS.length], score: 0, pid: null, mult: null, answer: null, answeredAt: null, delta: 0, correct: null };
+  const p = { id: rid(6), name, avatar: avatar || AVATARS[i % AVATARS.length], color: COLORS[i % COLORS.length], score: 0, pid: null, mult: null, used: [], answer: null, answeredAt: null, delta: 0, correct: null };
   S.players.push(p); return p;
 }
 function claimPlayer(id, pid, avatar) {
@@ -451,29 +487,25 @@ function claimPlayer(id, pid, avatar) {
 function startGame() { if (!S.players.length) throw new Error('Add at least one player'); S.phase = 'category'; }
 function pickCategory(catId) {
   const meta = catMeta(catId); if (!meta) throw new Error('Unknown category');
-  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  const unused = BANK.filter(q => q.cat === catId && !S.used.includes(q.id));
-  if (!unused.length) throw new Error('No questions left in that category');
-  const easy = shuffle(unused.filter(q => q.d === 'easy')), med = shuffle(unused.filter(q => q.d !== 'easy'));
-  const nEasy = Math.min(CONFIG.easyPerRound, easy.length);
-  let pick = easy.slice(0, nEasy).concat(med.slice(0, CONFIG.questionsPerRound - nEasy));
-  if (pick.length < CONFIG.questionsPerRound) pick = pick.concat(easy.slice(nEasy, nEasy + CONFIG.questionsPerRound - pick.length));
-  pick.sort((a, b) => (a.d === 'easy' ? 0 : 1) - (b.d === 'easy' ? 0 : 1)); // easy ones first
+  if (sett().perPick === 1 && S.lastCat === catId && CATEGORIES.some(c => c.id !== catId && remainingIn(c.id))) throw new Error('Pick a different category to last time');
+  const pick = poolFor(catId, Math.min(sett().perPick, Math.max(1, gameLen() - (S.qDone || 0))));
+  if (!pick.length) throw new Error('No questions left in that category');
   const qs = pick.map(q => q.id); S.used.push(...qs);
-  S.roundNo++; S.round = { catId, catName: meta.name, color: meta.color, icon: meta.icon, qs, qIndex: 0, deadline: null };
+  S.roundNo++; S.lastCat = catId; S.round = { catId, catName: meta.name, color: meta.color, icon: meta.icon, qs, qIndex: 0, deadline: null };
   S.players.forEach(p => { p.mult = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
   S.phase = 'multiplier';
 }
 function setMultiplier(p, m) {
   if (S.phase !== 'multiplier') throw new Error('Not the time to pick a multiplier');
-  if (!CONFIG.multipliers.includes(m)) throw new Error('Bad multiplier');
+  if (!multList(gameLen()).includes(m)) throw new Error('Bad multiplier');
+  if ((p.used || []).includes(m)) throw new Error('You already used ×' + m);
   p.mult = m;
   if (claimed().length && claimed().every(x => x.mult != null)) { clearTimeout(autoTimer); autoTimer = setTimeout(() => { autoTimer = null; if (S.phase === 'multiplier') { startQuestion(); broadcast(); } }, 2000); }
 }
 function startQuestion() {
   if (S.phase !== 'multiplier') throw new Error('Pick a category first');
   clearTimers();
-  S.players.forEach(p => { if (p.mult == null) p.mult = 1; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
+  S.players.forEach(p => { if (p.mult == null) p.mult = multList(gameLen()).find(m => !(p.used || []).includes(m)) || 1; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
   S.phase = 'question'; S.round.deadline = now() + CONFIG.questionSeconds * 1000;
   timer = setTimeout(() => { timer = null; if (S.phase === 'question') { reveal(); broadcast(); } }, CONFIG.questionSeconds * 1000 + 400);
 }
@@ -494,15 +526,21 @@ function reveal() {
     const m = p.mult || 1;
     if (p.answer == null) { p.correct = false; p.delta = 0; }
     else if (p.answer === q.a) { const f = Math.max(0, Math.min(1, 1 - (p.answeredAt - startedAt) / (CONFIG.questionSeconds * 1000))); p.correct = true; p.delta = CONFIG.base * m + Math.round(CONFIG.speedBonus * f); }
-    else { p.correct = false; p.delta = -CONFIG.wrongPenaltyPerStep * (m - 1); }
+    else { p.correct = false; p.delta = 0; }
     p.score += p.delta;
+    p.used = (p.used || []).concat(m);
   });
+  S.qDone = (S.qDone || 0) + 1;
   S.phase = 'reveal';
 }
 function next() {
   if (S.phase === 'reveal') {
+    if ((S.qDone || 0) >= gameLen()) { clearTimers(); S.round = null; S.phase = 'final'; recordGame(); return; }
     S.round.qIndex++;
-    if (S.round.qIndex >= S.round.qs.length) { S.phase = 'scoreboard'; return; }
+    if (S.round.qIndex >= S.round.qs.length) {
+      if (sett().perPick === 1 && S.qDone % 5 !== 0) { S.round = null; S.phase = 'category'; return; }
+      S.phase = 'scoreboard'; return;
+    }
     S.players.forEach(p => { p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
     if (CONFIG.multiplierPer === 'question') { S.players.forEach(p => p.mult = null); S.phase = 'multiplier'; } else { S.phase = 'multiplier'; startQuestion(); }
   } else if (S.phase === 'scoreboard') { S.round = null; S.phase = 'category'; }
@@ -526,7 +564,10 @@ function hostAct(a) {
       case 'next': next(); break;
       case 'skipRound': clearTimers(); S.round = null; S.phase = 'category'; break;
       case 'end': clearTimers(); S.phase = 'final'; recordGame(); break;
-      case 'resetScores': clearTimers(); S.players.forEach(p => { p.score = 0; p.mult = null; p.answer = null; }); S.round = null; S.roundNo = 0; S.phase = 'category'; break;
+      case 'resetScores': clearTimers(); S.players.forEach(p => { p.score = 0; p.mult = null; p.used = []; p.answer = null; }); S.round = null; S.roundNo = 0; S.qDone = 0; S.lastCat = null; S.phase = 'category'; break;
+      case 'setLevel': if (!LEVELS.some(l => l[0] === a.level)) throw new Error('Bad level'); sett().level = a.level; ls.set('lq_settings', sett()); break;
+      case 'setLen': if (!LENGTHS.includes(a.n)) throw new Error('Bad length'); if (S.qDone) throw new Error('Change game length before the first question'); sett().len = a.n; ls.set('lq_settings', sett()); break;
+      case 'setPerPick': if (!PERPICK.includes(a.n)) throw new Error('Bad number'); sett().perPick = a.n; ls.set('lq_settings', sett()); break;
       case 'lobby': clearTimers(); S.round = null; S.phase = 'lobby'; break;
       case 'reset': clearTimers(); freshState(S.code); qrDone = false; break;
     }
@@ -583,14 +624,24 @@ function renderHost() {
   $('#mechip').innerHTML = meP ? `👑 You: ${meP.avatar} ${esc(meP.name)}` : (ph === 'lobby' ? '👑 Playing? Tap “Me” on your name' : '👑 Host only');
   $('#mechip').classList.toggle('dim', !meP);
   const chip = $('#topchip');
-  if (HS.round) { chip.style.display = ''; chip.style.setProperty('--c', HS.round.color); chip.innerHTML = `<span class="dot"></span>${HS.round.icon} ${esc(HS.round.catName)} · R${HS.roundNo}`; }
-  else if (ph !== 'lobby') { chip.style.display = ''; chip.innerHTML = `Round ${HS.roundNo + 1}`; } else chip.style.display = 'none';
+  if (HS.round) { chip.style.display = ''; chip.style.setProperty('--c', HS.round.color); chip.innerHTML = `<span class="dot"></span>${HS.round.icon} ${esc(HS.round.catName)}`; }
+  else if (ph !== 'lobby') { chip.style.display = ''; chip.innerHTML = `${HS.qDone} played`; } else chip.style.display = 'none';
   if (ph === 'lobby') renderLobby(); else if (ph === 'category') renderCategory(); else if (ph === 'multiplier') renderMultiplier();
   else if (ph === 'question' || ph === 'reveal') renderQuestionH(); else if (ph === 'scoreboard') renderScoreboard(); else if (ph === 'final') renderFinal();
   renderStrip(); renderCtl();
 }
+function setupHtml() {
+  const st = HS.settings;
+  const seg = (items, cur, act) => `<div class="seg">${items.map(([v, l]) => `<button class="${cur === v ? 'on' : ''}" onclick='hostAct(${JSON.stringify(act(v))})'>${l}</button>`).join('')}</div>`;
+  return `<div class="sg"><span class="lbl">Difficulty</span>${seg(LEVELS, st.level, v => ({ type: 'setLevel', level: v }))}</div>`
+    + `<div class="sg"><span class="lbl">Game</span>${seg(LENGTHS.map(n => [n, n + ' Qs · ×1–×' + n]), st.len || 10, v => ({ type: 'setLen', n: v }))}</div>`
+    + `<div class="sg"><span class="lbl">Per category</span>${seg(PERPICK.map(n => [n, String(n)]), st.perPick, v => ({ type: 'setPerPick', n: v }))}</div>`
+    + `<div class="hint">Everyone gets ×1 to ×${st.len || 10} — each multiplier used once · ${st.perPick === 1 ? 'new category every question' : st.perPick + ' questions per category'}</div>`;
+}
+const levelName = (d) => d === 'easy' ? 'Easy' : d === 'hard' ? 'Hard' : 'Medium';
 function renderLobby() {
   showIn('.hv', 'hv-lobby');
+  $('#setup-lobby').innerHTML = setupHtml();
   $('#codebig').textContent = HS.code; $('#bigcode').textContent = HS.code;
   const hp = HS.players.find(p => p.pid === 'host'), nOn = HS.players.filter(p => p.pid).length;
   $('#hostbar').innerHTML = (hp ? `<div class="hn" style="--c:${hp.color}"><div class="av">${hp.avatar}</div>👑 Host: ${esc(hp.name)}</div>` : `<div class="hn none">👑 Host not playing — add your name and tap “Me”</div>`) + `<div class="cnt">${HS.players.length}/${CONFIG.maxPlayers} players · <b>${nOn} ready</b></div>`;
@@ -614,21 +665,26 @@ function closeBig() { $('#bigjoin').classList.remove('on'); }
 function addName() { const i = $('#addname'); const n = i.value.trim(); if (!n) return; hostAct({ type: 'addPlayer', name: n }); i.value = ''; }
 function renderCategory() {
   showIn('.hv', 'hv-category');
-  $('#cat-title').textContent = HS.roundNo === 0 ? 'Pick a category to start' : `Round ${HS.roundNo + 1} — pick a category`;
-  $('#catgrid').innerHTML = HS.categories.map(c => `<button class="cat" style="--c:${c.color}" ${c.remaining ? '' : 'disabled'} onclick="hostAct({type:'category',cat:'${c.id}'})"><div class="ic">${c.icon}</div><div class="nm">${esc(c.name)}</div><div class="rem">${c.remaining ? (c.remaining < CONFIG.questionsPerRound ? 'only ' + c.remaining + ' left' : Math.floor(c.remaining / CONFIG.questionsPerRound) + ' rounds left') : (c.id === 'photo' ? 'add your own in the lobby' : 'all used up')}</div></button>`).join('');
+  const one = HS.settings.perPick === 1;
+  $('#cat-title').textContent = HS.qDone === 0 ? 'Pick a category to start' : `Question ${HS.qDone + 1} of ${HS.config.multipliers.length} — pick ${one ? 'the next' : 'a'} category`;
+  $('#setup-cat').innerHTML = setupHtml();
+  const lv = HS.settings.level, others = HS.categories.some(c => c.id !== HS.lastCat && c.remaining);
+  $('#catgrid').innerHTML = HS.categories.map(c => { const last = one && c.id === HS.lastCat && others; const ok = c.remaining && !last;
+    const rem = last ? 'just played' : !c.remaining ? (c.id === 'photo' ? 'add your own in the lobby' : 'all used up') : lv === 'mixed' ? c.remaining + ' left' : c.atLevel ? c.atLevel + ' ' + lv + ' left' : 'no ' + lv + ' · uses others';
+    return `<button class="cat" style="--c:${c.color}" ${ok ? '' : 'disabled'} onclick="hostAct({type:'category',cat:'${c.id}'})"><div class="ic">${c.icon}</div><div class="nm">${esc(c.name)}</div><div class="rem">${rem}</div></button>`; }).join('');
 }
 function renderMultiplier() {
   showIn('.hv', 'hv-multiplier');
   const r = HS.round, c = HS.config;
-  $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">Question ${r.qIndex + 1} of ${r.total} · ${r.nextD === 'easy' ? 'Easy' : 'Medium'} question coming up</div></div>`;
-  $('#rules').innerHTML = c.multipliers.map(m => `<div class="rule x${m}"><div class="x">×${m}</div><div class="w">+${c.base * m}${m === 1 ? ' (+speed)' : ''}</div><div class="l">nothing lost if wrong</div></div>`).join('');
-  $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${crown(p)}${esc(p.name)}</div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
+  $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">${r.total > 1 ? `Question ${r.qIndex + 1} of ${r.total} · ` : ''}${levelName(r.nextD)} question coming up</div></div>`;
+  $('#rules').innerHTML = `<div class="rulesline">Correct = ${c.base} × your multiplier · each multiplier once · question ${HS.qDone + 1} of ${c.multipliers.length}</div>`;
+  $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="col"><div class="nm">${crown(p)}${esc(p.name)}</div><div class="toks">${c.multipliers.map(m => `<i class="${p.used.includes(m) ? 'u' : ''}">${m}</i>`).join('')}</div></div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
 }
 function renderQuestionH() {
   showIn('.hv', 'hv-question');
   const r = HS.round, q = r.question, rv = HS.phase === 'reveal';
   $('#hv-question').classList.toggle('reveal', rv);
-  $('#hq-sub').innerHTML = `${r.icon} ${esc(r.catName)} · Q${r.qIndex + 1}/${r.total} <span class="dchip ${q.d}">${q.d === 'easy' ? 'Easy' : 'Medium'}</span>`;
+  $('#hq-sub').innerHTML = `${r.icon} ${esc(r.catName)} · ${r.total > 1 ? `Q${r.qIndex + 1}/${r.total}` : `Q${HS.qDone + (rv ? 0 : 1)}`} <span class="dchip ${q.d}">${levelName(q.d)}</span>`;
   const n = HS.players.filter(p => p.pid).length, a = HS.players.filter(p => p.pid && p.answered).length;
   $('#hq-ans').textContent = rv ? '' : `${a} / ${n} answered`;
   $('#qtext').textContent = q.text;
@@ -644,7 +700,7 @@ const ranked = (ps) => [...ps].sort((a, b) => b.score - a.score);
 function renderScoreboard() {
   showIn('.hv', 'hv-scoreboard');
   const rs = ranked(HS.players), max = Math.max(1, ...rs.map(p => Math.abs(p.score)));
-  $('#sb-title').textContent = `Scoreboard after Round ${HS.roundNo}`;
+  $('#sb-title').textContent = `Scoreboard · ${HS.qDone} question${HS.qDone === 1 ? '' : 's'} played`;
   $('#rows').innerHTML = rs.map((p, i) => `<div class="srow" style="--c:${p.color};animation-delay:${i * .08}s"><div class="rk">${i + 1}</div><div class="av">${p.avatar}</div><div class="bar"><i style="width:${Math.max(4, Math.max(0, p.score) / max * 100)}%"></i><b>${crown(p)}${esc(p.name)}</b></div><div class="sc">${p.score}</div></div>`).join('');
 }
 function renderFinal() {
@@ -671,21 +727,22 @@ function primary() {
   if (ph === 'lobby') return { label: 'Start game ▶', act: { type: 'start' }, cls: 'good' };
   if (ph === 'multiplier') return { label: 'Go ▶', act: { type: 'go' } };
   if (ph === 'question') return { label: 'Reveal now', act: { type: 'reveal' }, cls: 'ghost' };
-  if (ph === 'reveal') return { label: HS.round.qIndex + 1 >= HS.round.total ? 'Scoreboard ▶' : 'Next ▶', act: { type: 'next' } };
-  if (ph === 'scoreboard') return { label: 'Next round ▶', act: { type: 'next' }, cls: 'good' };
+  if (ph === 'reveal' && HS.qDone >= HS.config.multipliers.length) return { label: 'Final results 🏆', act: { type: 'next' }, cls: 'good' };
+  if (ph === 'reveal') { const end = HS.round.qIndex + 1 >= HS.round.total; return { label: !end ? 'Next ▶' : HS.settings.perPick === 1 && HS.qDone % 5 !== 0 ? 'Next category ▶' : 'Scoreboard ▶', act: { type: 'next' } }; }
+  if (ph === 'scoreboard') return { label: 'Next category ▶', act: { type: 'next' }, cls: 'good' };
   return null;
 }
 let endArm = false, restartArm = false;
 function renderCtl() {
   const p = primary(), ph = HS.phase; let h = '';
   const me = HS.players.find(x => x.pid === 'host');
-  if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
+  if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => me.used.includes(m) ? `<button class="btn mybtn usedm" disabled>×${m}</button>` : `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
   if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
   const playing = me && (ph === 'multiplier' || ph === 'question');
   if (ph === 'lobby') h += `<button class="btn ghost" onclick="shareLink()">💬 Text link</button><button class="btn ghost" onclick="openSheet()">📸 Photos</button>`;
   else h += `<button class="btn ghost" onclick="hostAct({type:'lobby'})" title="Back to the lobby, keeps players and scores">Lobby</button>`;
   if (!playing) h += `<button class="btn ${restartArm ? 'bad' : 'ghost'}" onclick="restartGame()">${restartArm ? 'Tap again: restart' : '↻ Restart'}</button>`;
-  if (!playing && ph !== 'lobby' && ph !== 'final' && ph !== 'category') h += `<button class="btn ghost" onclick="hostAct({type:'skipRound'})">Skip round</button>`;
+  if (!playing && ph !== 'lobby' && ph !== 'final' && ph !== 'category') h += `<button class="btn ghost" onclick="hostAct({type:'skipRound'})">${HS.settings.perPick === 1 ? 'Skip question' : 'Skip round'}</button>`;
   if (ph === 'scoreboard' || ph === 'category') h += `<button class="btn ${endArm ? 'bad' : 'ghost'}" onclick="endGame()">${endArm ? 'Tap again to end' : 'End game'}</button>`;
   if (ph === 'final') h += `<button class="btn good" onclick="hostAct({type:'resetScores'})">Play again (new questions)</button>`;
   if (p) h += `<button class="btn ${p.cls || ''}" onclick='hostAct(${JSON.stringify(p.act)})'>${p.label}</button>`;
@@ -747,7 +804,7 @@ function goHome() { ls.del('lq_room'); location.href = pageUrl(); }
 function leave() { send({ type: 'leave' }); me = null; renderPlayer(); }
 function joinNew() { const name = $('#name').value.trim(); if (!name) return toast('Type a name'); send({ type: 'join', name, avatar }); }
 function claim(id) { send({ type: 'claim', id, avatar }); }
-function pickMult(m) { if (picked != null) return; picked = m; renderMult(); send({ type: 'mult', mult: m }); }
+function pickMult(m) { if (picked != null) return; const me0 = mine(); if (me0 && me0.used.includes(m)) return; picked = m; renderMult(); send({ type: 'mult', mult: m }); }
 function pickAnswer(i) { if (chosen != null) return; chosen = i; renderQuestionP(); send({ type: 'answer', choice: i }); if (navigator.vibrate) navigator.vibrate(30); }
 const mine = () => PS ? PS.players.find(p => p.pid === pid) : null;
 const myRank = () => ranked(PS.players).findIndex(p => p.pid === pid) + 1;
@@ -759,7 +816,7 @@ function renderPlayer() {
   $('#hdr').style.display = ''; $('#foot').style.display = '';
   $('#hdr').style.setProperty('--c', p.color); $('#h-av').textContent = p.avatar; $('#h-nm').textContent = p.name; $('#h-sc').textContent = p.score;
   $('#h-rk').textContent = PS.players.length > 1 ? ord(myRank()) + ' place' : '';
-  $('#f-l').textContent = (PS.round ? `${PS.round.icon} ${PS.round.catName} · Q${PS.round.qIndex + 1}/${PS.round.total}` : `Round ${PS.roundNo + 1}`) + ' · room ' + code;
+  $('#f-l').textContent = (PS.round ? `${PS.round.icon} ${PS.round.catName}${PS.round.total > 1 ? ` · Q${PS.round.qIndex + 1}/${PS.round.total}` : ''}` : `${PS.qDone} played`) + ' · room ' + code;
   const ph = PS.phase;
   if (ph === 'lobby') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎉'; $('#w-t').textContent = "You're in!"; $('#w-s').textContent = 'Watch the TV — the host will start soon'; }
   else if (ph === 'category') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎲'; $('#w-t').textContent = 'Picking a category…'; $('#w-s').textContent = 'Shout your preference at the host'; }
@@ -777,11 +834,14 @@ function renderLogin() {
 }
 function renderMult() {
   const c = PS.config, p = mine(), locked = p && p.mult != null ? p.mult : picked;
-  $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName} · Q${PS.round.qIndex + 1} of ${PS.round.total} · ${PS.round.nextD === 'easy' ? 'EASY' : 'MEDIUM'} question next`;
-  const col = { 1: '#4b5578', 2: '#e0a000', 3: '#d81b98' };
-  $('#mults').innerHTML = c.multipliers.map(m => `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${col[m] || '#3a86ff'}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m} if right${m === 1 ? ' (+ speed bonus)' : ''}</div><div class="l">nothing lost if wrong</div></button>`).join('');
+  $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName}${PS.round.total > 1 ? ` · Q${PS.round.qIndex + 1} of ${PS.round.total}` : ''} · ${levelName(PS.round.nextD).toUpperCase()} question next`;
+  const used = p ? p.used : [], hue = (m) => `hsl(${220 - (m - 1) * (220 / Math.max(1, c.multipliers.length - 1))} 75% 48%)`;
+  $('#mults').classList.toggle('ten', c.multipliers.length > 6);
+  $('#mults').innerHTML = c.multipliers.map(m => used.includes(m)
+    ? `<button class="mb used" disabled><div class="x">×${m}</div><div class="l">used Q${used.indexOf(m) + 1}</div></button>`
+    : `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${hue(m)}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m}</div></button>`).join('');
   const n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.mult != null).length;
-  $('#m-status').textContent = locked != null ? `Locked ×${locked} · ${k}/${n} ready` : 'Pick one — the question comes next';
+  $('#m-status').textContent = locked != null ? `Locked ×${locked} · ${k}/${n} ready` : `${c.multipliers.length - used.length} left — each one only once`;
 }
 function renderQuestionP() {
   const q = PS.round.question, p = mine(), ans = p && p.answered ? (chosen ?? -1) : chosen;
@@ -798,12 +858,12 @@ function renderReveal() {
   const p = mine(), q = PS.round.question, r = $('#result');
   if (p.answer == null) { r.className = 'result na'; r.innerHTML = `<div class="d">⏱️</div><h1>Too slow</h1><div class="m">No answer, no points</div>`; }
   else if (p.correct) { r.className = 'result ok'; r.innerHTML = `<div class="d">+${p.delta}</div><h1>Correct! 🎉</h1><div class="m">×${p.mult}${p.delta > PS.config.base * p.mult ? ' + ' + (p.delta - PS.config.base * p.mult) + ' speed bonus' : ''}</div>`; if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
-  else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬 — no points lost</h1><div class="m">You picked ${LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
+  else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬</h1><div class="m">You picked ${LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
   $('#r-correct').textContent = `Answer: ${LETTERS[q.correct]} — ${q.options[q.correct]}`;
 }
 function renderScore(final) {
   const rk = myRank(), p = mine();
-  $('#s-t').textContent = final ? 'Final result' : `After round ${PS.roundNo}`;
+  $('#s-t').textContent = final ? 'Final result' : `After ${PS.qDone} questions`;
   $('#s-rank').textContent = ord(rk); $('#s-pts').textContent = `${p.score} pts`;
   $('#s-sub').textContent = final ? (rk === 1 ? '🏆 Champion!' : rk <= 3 ? '🥈 On the podium' : 'Better luck next time') : (rk === 1 ? "You're leading 🔥" : `${ranked(PS.players)[0].score - p.score} behind the leader`);
 }
