@@ -17,6 +17,14 @@ const CATEGORIES = [
   { id: 'aussie',   name: 'Aussie',        icon: '🇦🇺', color: '#1b998b' },
   { id: 'animals',  name: 'Animals',       icon: '🐨', color: '#80b918' },
   { id: 'tech',     name: 'Tech',          icon: '💻', color: '#4895ef' },
+  { id: 'games',    name: 'Video Games',   icon: '🎮', color: '#7209b7' },
+  { id: 'cars',     name: 'Cars',          icon: '🏎️', color: '#d62828' },
+  { id: 'space',    name: 'Space',         icon: '🚀', color: '#3d5a80' },
+  { id: 'body',     name: 'Human Body',    icon: '🫀', color: '#e76f51' },
+  { id: 'words',    name: 'Words & Slang', icon: '🔤', color: '#2a9d8f' },
+  { id: 'myth',     name: 'Myths & Legends', icon: '⚡', color: '#9d4edd' },
+  { id: 'brands',   name: 'Brands',        icon: '🏷️', color: '#f77f00' },
+  { id: 'books',    name: 'Art & Books',   icon: '📚', color: '#6d597a' },
   { id: 'pics',     name: 'Pictures',      icon: '🖼️', color: '#00b4d8' },
   { id: 'photo',    name: 'Your Photos',   icon: '📸', color: '#7b2cbf' }, // added on the host phone
 ];

@@ -272,6 +272,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 /* photo builder */
 .sheet{position:fixed;inset:0;background:rgba(5,8,20,.92);z-index:20;display:none;flex-direction:column;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overflow:auto}
 .sheet.on{display:flex}
+.cpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.cp{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:var(--card);color:#fff;font:inherit;font-weight:900;font-size:16px;border-radius:14px;padding:12px;text-align:left;cursor:pointer;opacity:.55}
+.cp .ic{font-size:24px}.cp .nm{flex:1}.cp .ck{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);font-size:14px}
+.cp.on{opacity:1;border-color:var(--c);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 45%,transparent),var(--card))}.cp.on .ck{background:var(--good);color:#06291c}
 .sheet img.prev{max-height:30vh;max-width:100%;object-fit:contain;border-radius:12px;align-self:center}
 .sheet label{font-size:12px;color:var(--muted)}
 .plist{display:flex;flex-direction:column;gap:8px}
@@ -387,6 +391,11 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 </div>
 
 <!-- photo question builder -->
+<div class="sheet catsheet" id="catsheet">
+  <div class="row"><h1 style="flex:1">Choose categories <span id="catcount" style="color:var(--accent)"></span></h1><button class="btn good sm" style="width:auto" onclick="saveCats()">Done ✓</button></div>
+  <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn ghost sm" style="width:auto" onclick="catsPick('all')">All</button><button class="btn ghost sm" style="width:auto" onclick="catsPick('none')">None</button><button class="btn ghost sm" style="width:auto" onclick="catsPick(10)">🎲 Random 10</button><button class="btn ghost sm" style="width:auto" onclick="catsPick(5)">🎲 Random 5</button></div>
+  <div class="cpick" id="cpick"></div>
+</div>
 <div class="sheet" id="sheet">
   <div class="row"><h1 style="flex:1">📸 Photo round</h1><button class="btn ghost sm" onclick="closeSheet()">Done</button></div>
   <div class="sm">Pick a photo from your camera roll (screenshot an actor, a footballer, a mate's baby photo…), type the right answer and three wrong ones. Saved on this phone.</div>
@@ -455,13 +464,15 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 /* ===================== HOST ===================== */
 let S = null, timer = null, autoTimer = null, qrDone = false, BANK = [];
 function buildBank() {
-  BANK = QUESTIONS.map((q, i) => ({ ...q, id: 'q' + i }));
+  const hid = (t) => { let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
+  BANK = QUESTIONS.map((q, i) => ({ ...q, id: 'q' + hid(q.cat + '|' + q.q + '|' + q.options[q.a]) }));
   ls.get('lq_photos', []).forEach((p, i) => BANK.push({ cat: 'photo', q: p.q, image: p.img, options: p.options, a: p.a, id: 'p' + i }));
 }
 const LEVELS = [['easy', 'Easy'], ['medium', 'Medium'], ['hard', 'Hard'], ['mixed', 'Mixed']], PERPICK = [1, 2, 3, 5];
 const DORDER = { easy: 0, medium: 1, hard: 2 };
 const LENGTHS = [5, 10];
-function defaultSettings() { const d = ls.get('lq_settings', null); return { level: d && d.level || 'mixed', perPick: d && d.perPick || 1, len: d && d.len || 10, mode: d && d.mode || 'choice' }; }
+function defaultSettings() { const d = ls.get('lq_settings', null); return { level: d && d.level || 'mixed', perPick: d && d.perPick || 1, len: d && d.len || 10, mode: d && d.mode || 'choice', cats: d && d.cats || null }; }
+const catOn = (id) => { const c = sett().cats; return !c || c.includes(id); };
 // questions that only make sense with the options on screen stay multiple choice in typing mode
 const mcOnly = (q) => /[²³ˣ√π∞∫₀-₉⁰-⁹·]/.test(q.options[q.a]) || !!q.svg || !!q.image || /\b(these|NOT|following|of the above)\b/.test(q.q) || /^(Which|What) (is|was) (bigger|larger|smaller)/i.test(q.q) || /^True or false/i.test(q.q) || q.options.some(o => /^(True|False|Yes|No)$/i.test(o));
 const typedFor = (q) => sett().mode === 'typed' && q && !mcOnly(q);
@@ -494,7 +505,10 @@ function freshState(code) { S = { code, phase: 'lobby', players: [], used: [], r
 const sett = () => S.settings || (S.settings = defaultSettings());
 // questions for a category at the chosen level, falling back to the nearest level if that one has run out
 function poolFor(catId, n) {
-  const lv = sett().level, unused = BANK.filter(q => q.cat === catId && !S.used.includes(q.id));
+  const lv = sett().level, seen = new Set(ls.get('lq_seen', []));
+  let unused = BANK.filter(q => q.cat === catId && !S.used.includes(q.id));
+  const fresh = unused.filter(q => !seen.has(q.id)), want = (x) => lv === 'mixed' || x.d === lv;
+  if (fresh.filter(want).length >= n) unused = fresh; // only repeat old questions once this category's fresh ones run out
   const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   if (lv === 'mixed') {
     const by = { easy: shuffle(unused.filter(q => q.d === 'easy')), medium: shuffle(unused.filter(q => q.d === 'medium')), hard: shuffle(unused.filter(q => q.d === 'hard')) };
@@ -513,7 +527,7 @@ const currentQ = () => S.round ? BANK.find(q => q.id === S.round.qs[S.round.qInd
 function publicState() {
   const q = currentQ(), show = S.phase === 'reveal' || S.phase === 'scoreboard';
   return { code: S.code, phase: S.phase, roundNo: S.roundNo, qDone: S.qDone || 0, mq: mq(), lastCat: S.lastCat, settings: sett(), config: { ...CONFIG, multipliers: multList(gameLen()) }, hostTime: now(),
-    categories: CATEGORIES.map(c => ({ ...c, remaining: remainingIn(c.id), atLevel: levelLeft(c.id) })),
+    categories: CATEGORIES.filter(c => c.id === 'photo' || BANK.some(q => q.cat === c.id)).map(c => ({ ...c, on: catOn(c.id), remaining: remainingIn(c.id), atLevel: levelLeft(c.id) })),
     players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], wagered: p.wager != null, wager: show ? p.wager : undefined, maxWager: maxWager(p), answered: p.answer != null, answer: show ? p.answer : undefined, typed: show ? p.typed : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
     round: S.round ? { catId: S.round.catId, catName: S.round.catName, color: S.round.color, icon: S.round.icon, qIndex: S.round.qIndex, total: S.round.qs.length, deadline: S.round.deadline,
       typed: !!S.round.typed, secs: S.round.secs, gamble: !!S.round.gamble,
@@ -546,6 +560,7 @@ function pickCategory(catId) {
   const pick = poolFor(catId, Math.min(sett().perPick, Math.max(1, gameLen() - mq())));
   if (!pick.length) throw new Error('No questions left in that category');
   const qs = pick.map(q => q.id); S.used.push(...qs);
+  const seenL = ls.get('lq_seen', []).concat(qs); ls.set('lq_seen', seenL.slice(-3000));
   S.roundNo++; S.lastCat = catId; S.round = { catId, catName: meta.name, color: meta.color, icon: meta.icon, qs, qIndex: 0, deadline: null };
   S.players.forEach(p => { p.mult = null; p.wager = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
   S.phase = 'multiplier';
@@ -642,9 +657,10 @@ function hostAct(a) {
       case 'setLen': if (!LENGTHS.includes(a.n)) throw new Error('Bad length'); if (S.qDone) throw new Error('Change game length before the first question'); sett().len = a.n; ls.set('lq_settings', sett()); break;
       case 'setMode': if (!['choice', 'typed'].includes(a.mode)) throw new Error('Bad mode'); sett().mode = a.mode; ls.set('lq_settings', sett()); break;
       case 'flip': flipTyped(a.id); break;
+      case 'setCats': { const ids = (a.cats || []).filter(id => catMeta(id)); if (!ids.length) throw new Error('Pick at least one category'); sett().cats = ids.length === CATEGORIES.length ? null : ids; ls.set('lq_settings', sett()); break; }
       case 'gamble': if (S.phase !== 'multiplier') throw new Error('Gamble is picked before the question'); S.round.gamble = !S.round.gamble; S.players.forEach(p => { p.mult = null; p.wager = null; }); break;
       case 'hostWager': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); setWager(me, a.amount); break; }
-      case 'randomCat': { const ok = CATEGORIES.filter(c => c.id !== 'photo' && remainingIn(c.id) && !(sett().perPick === 1 && c.id === S.lastCat)); if (!ok.length) throw new Error('No categories left'); pickCategory(ok[Math.floor(Math.random() * ok.length)].id); break; }
+      case 'randomCat': { const ok = CATEGORIES.filter(c => c.id !== 'photo' && catOn(c.id) && remainingIn(c.id) && !(sett().perPick === 1 && c.id === S.lastCat)); if (!ok.length) throw new Error('No categories left'); pickCategory(ok[Math.floor(Math.random() * ok.length)].id); break; }
       case 'setPerPick': if (!PERPICK.includes(a.n)) throw new Error('Bad number'); sett().perPick = a.n; ls.set('lq_settings', sett()); break;
       case 'lobby': clearTimers(); S.round = null; S.phase = 'lobby'; break;
       case 'reset': clearTimers(); freshState(S.code); qrDone = false; break;
@@ -712,7 +728,9 @@ function renderHost() {
 function setupHtml() {
   const st = HS.settings;
   const seg = (items, cur, act) => `<div class="seg">${items.map(([v, l]) => `<button class="${cur === v ? 'on' : ''}" onclick='hostAct(${JSON.stringify(act(v))})'>${l}</button>`).join('')}</div>`;
-  return `<div class="sg"><span class="lbl">Answers</span>${seg([['choice', 'A B C D'], ['typed', '⌨️ Type it']], st.mode || 'choice', v => ({ type: 'setMode', mode: v }))}</div>`
+  const nOn = HS.categories.filter(c => c.on).length;
+  return `<div class="sg"><span class="lbl">Categories</span><div class="seg"><button class="on" onclick="openCats()">${nOn === HS.categories.length ? 'All ' + nOn : nOn + ' of ' + HS.categories.length} ✎</button></div></div>`
+    + `<div class="sg"><span class="lbl">Answers</span>${seg([['choice', 'A B C D'], ['typed', '⌨️ Type it']], st.mode || 'choice', v => ({ type: 'setMode', mode: v }))}</div>`
     + `<div class="sg"><span class="lbl">Difficulty</span>${seg(LEVELS, st.level, v => ({ type: 'setLevel', level: v }))}</div>`
     + `<div class="sg"><span class="lbl">Game</span>${seg(LENGTHS.map(n => [n, n + ' Qs · ×1–×' + n]), st.len || 10, v => ({ type: 'setLen', n: v }))}</div>`
     + `<div class="sg"><span class="lbl">Per category</span>${seg(PERPICK.map(n => [n, String(n)]), st.perPick, v => ({ type: 'setPerPick', n: v }))}</div>`
@@ -742,14 +760,30 @@ function renderLobby() {
 }
 function openBig() { $('#bigjoin').classList.add('on'); }
 function closeBig() { $('#bigjoin').classList.remove('on'); }
+let catDraft = [];
+function openCats() { catDraft = HS.categories.filter(c => c.on).map(c => c.id); renderCats(); $('#catsheet').classList.add('on'); }
+function renderCats() {
+  $('#catcount').textContent = `${catDraft.length} picked`;
+  $('#cpick').innerHTML = HS.categories.map(c => `<button class="cp ${catDraft.includes(c.id) ? 'on' : ''}" style="--c:${c.color}" onclick="catToggle('${c.id}')"><span class="ic">${c.icon}</span><span class="nm">${esc(c.name)}</span><span class="ck">${catDraft.includes(c.id) ? '✓' : ''}</span></button>`).join('');
+}
+function catToggle(id) { catDraft = catDraft.includes(id) ? catDraft.filter(x => x !== id) : catDraft.concat(id); renderCats(); }
+function catsPick(k) {
+  const ids = HS.categories.map(c => c.id);
+  if (k === 'all') catDraft = ids; else if (k === 'none') catDraft = [];
+  else { const pool = HS.categories.filter(c => c.id !== 'photo' && c.remaining).map(c => c.id); for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; } catDraft = pool.slice(0, k); }
+  renderCats();
+}
+function saveCats() { if (!catDraft.length) return toast('Pick at least one category'); hostAct({ type: 'setCats', cats: catDraft }); $('#catsheet').classList.remove('on'); }
 function addName() { const i = $('#addname'); const n = i.value.trim(); if (!n) return; hostAct({ type: 'addPlayer', name: n }); i.value = ''; }
 function renderCategory() {
   showIn('.hv', 'hv-category');
   const one = HS.settings.perPick === 1;
   $('#cat-title').textContent = (HS.qDone === 0 ? 'Pick a category' : `Q${HS.mq + 1} of ${HS.config.multipliers.length} — pick a category`) + ' (or tap 🎲 Random)';
   $('#setup-cat').innerHTML = setupHtml();
-  const lv = HS.settings.level, others = HS.categories.some(c => c.id !== HS.lastCat && c.remaining);
-  $('#catgrid').innerHTML = HS.categories.map(c => { const last = one && c.id === HS.lastCat && others; const ok = c.remaining && !last;
+  const lv = HS.settings.level, others = HS.categories.some(c => c.on && c.id !== HS.lastCat && c.remaining);
+  const shown = HS.categories.filter(c => c.on);
+  $('#catgrid').style.gridTemplateColumns = `repeat(${shown.length > 16 ? 6 : shown.length > 12 ? 5 : 4},1fr)`;
+  $('#catgrid').innerHTML = shown.map(c => { const last = one && c.id === HS.lastCat && others; const ok = c.remaining && !last;
     const rem = last ? 'just played' : !c.remaining ? (c.id === 'photo' ? 'add your own in the lobby' : 'all used up') : lv === 'mixed' ? c.remaining + ' left' : c.atLevel ? c.atLevel + ' ' + lv + ' left' : 'no ' + lv + ' · uses others';
     return `<button class="cat" style="--c:${c.color}" ${ok ? '' : 'disabled'} onclick="hostAct({type:'category',cat:'${c.id}'})"><div class="ic">${c.icon}</div><div class="nm">${esc(c.name)}</div><div class="rem">${rem}</div></button>`; }).join('');
 }
