@@ -990,3 +990,536 @@ if (typeof module !== 'undefined') module.exports = { CATEGORIES, QUESTIONS };
   for (let i = QUESTIONS.length - 1; i >= 0; i--) if (!QUESTIONS[i]) QUESTIONS.splice(i, 1);
   QUESTIONS.push(...NEW);
 })();
+
+// ---- Nov 2026: Hard tier recalibrated to "harder medium" (gettable when typed) ----
+(function () {
+  const REPLACE = {
+ "Who won tennis's 'Golden Slam' (all four majors plus Olympic gold) in 1988?": {
+  "cat": "sports",
+  "q": "Which Aussie swimmer was nicknamed 'the Thorpedo'?",
+  "options": [
+   "Ian Thorpe",
+   "Grant Hackett",
+   "Kieren Perkins",
+   "Michael Klim"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "Which Australian won the 1980 Formula 1 World Championship?": {
+  "cat": "sports",
+  "q": "Which Australian won the Wimbledon men's singles title in 2002?",
+  "options": [
+   "Pat Rafter",
+   "Lleyton Hewitt",
+   "Mark Philippoussis",
+   "Nick Kyrgios"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "How high off the ground is a regulation basketball hoop?": {
+  "cat": "sports",
+  "q": "In golf, what is a score of three under par on one hole called?",
+  "options": [
+   "Eagle",
+   "Condor",
+   "Albatross",
+   "Birdie"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "What was the code name of the first atomic bomb test in 1945?": {
+  "cat": "history",
+  "q": "Which ship carried the Pilgrims to America in 1620?",
+  "options": [
+   "Endeavour",
+   "Santa Maria",
+   "Beagle",
+   "Mayflower"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "A price goes up 20%, then down 20%. Overall change?": {
+  "cat": "maths",
+  "q": "What is 15 × 15?",
+  "options": [
+   "225",
+   "215",
+   "235",
+   "250"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "How many times is the digit 1 written when you count from 1 to 20?": {
+  "cat": "maths",
+  "q": "What is 20% of 350?",
+  "options": [
+   "35",
+   "70",
+   "75",
+   "50"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "A bat and ball cost $1.10. The bat costs $1 more than the ball. Ball price?": {
+  "cat": "maths",
+  "q": "What is 2 to the power of 8?",
+  "options": [
+   "128",
+   "512",
+   "256",
+   "64"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "You drive there at 60 km/h and back at 40 km/h. Average speed for the trip?": {
+  "cat": "maths",
+  "q": "What is the square root of 196?",
+  "options": [
+   "16",
+   "13",
+   "15",
+   "14"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "How many squares of any size are on a 3×3 grid?": {
+  "cat": "maths",
+  "q": "What is 25 × 24?",
+  "options": [
+   "600",
+   "625",
+   "575",
+   "550"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What is the last digit of 7¹⁰⁰?": {
+  "cat": "maths",
+  "q": "How many seconds are there in one hour?",
+  "options": [
+   "360",
+   "6000",
+   "3600",
+   "1440"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "5 machines make 5 widgets in 5 min. How long for 100 machines to make 100?": {
+  "cat": "maths",
+  "q": "What is 75% of 240?",
+  "options": [
+   "160",
+   "180",
+   "200",
+   "120"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "A clock reads 3:15. What is the angle between the hands?": {
+  "cat": "maths",
+  "q": "What is 7 × 7 × 7?",
+  "options": [
+   "243",
+   "294",
+   "349",
+   "343"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "What is the derivative of ln(x²)?": {
+  "cat": "advmaths",
+  "q": "What is 7! divided by 5!?",
+  "options": [
+   "42",
+   "35",
+   "56",
+   "30"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What is the integral of x² from 0 to 1?": {
+  "cat": "advmaths",
+  "q": "If f(x) = x² + 3x, what is f(4)?",
+  "options": [
+   "24",
+   "28",
+   "19",
+   "32"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "What is i to the power of 2026?": {
+  "cat": "advmaths",
+  "q": "What is the derivative of 3x² when x = 2?",
+  "options": [
+   "6",
+   "24",
+   "12",
+   "10"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "What is log₂(1/8)?": {
+  "cat": "advmaths",
+  "q": "A right-angled triangle has sides 6 and 8. How long is the hypotenuse?",
+  "options": [
+   "12",
+   "14",
+   "9",
+   "10"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "What is the derivative of x·eˣ?": {
+  "cat": "advmaths",
+  "q": "How many diagonals does an octagon have?",
+  "options": [
+   "20",
+   "16",
+   "24",
+   "28"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "Flip 3 fair coins. Probability of at least one head?": {
+  "cat": "advmaths",
+  "q": "What is the mean of 3, 7, 8, 10 and 12?",
+  "options": [
+   "7",
+   "9",
+   "8",
+   "10"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "How many distinct ways can you arrange the letters of LEVEL?": {
+  "cat": "advmaths",
+  "q": "Solve for x: 5x − 4 = 3x + 10",
+  "options": [
+   "5",
+   "6",
+   "8",
+   "7"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "Roll two dice. Probability the total is 8?": {
+  "cat": "advmaths",
+  "q": "In how many different orders can 4 people line up in a row?",
+  "options": [
+   "24",
+   "16",
+   "12",
+   "8"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "Roughly what is the half-life of carbon-14?": {
+  "cat": "science",
+  "q": "What is the chemical symbol for sodium?",
+  "options": [
+   "So",
+   "Na",
+   "Sd",
+   "S"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "What is the third most abundant gas in Earth's atmosphere?": {
+  "cat": "science",
+  "q": "Which organ produces insulin?",
+  "options": [
+   "Liver",
+   "Kidney",
+   "Pancreas",
+   "Spleen"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "Roughly how fast does sound travel in air at 20°C?": {
+  "cat": "science",
+  "q": "Who discovered penicillin in 1928?",
+  "options": [
+   "Louis Pasteur",
+   "Joseph Lister",
+   "Edward Jenner",
+   "Alexander Fleming"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "What is the smallest bone in the human body?": {
+  "cat": "science",
+  "q": "Lack of vitamin C causes which disease, once common among sailors?",
+  "options": [
+   "Scurvy",
+   "Rickets",
+   "Beriberi",
+   "Gout"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What is the name of the spaceship in Alien (1979)?": {
+  "cat": "movies",
+  "q": "In Breaking Bad, what alias does Walter White go by?",
+  "options": [
+   "Heisenberg",
+   "Einstein",
+   "Gatsby",
+   "Oppenheimer"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "In the TV series Severance, what is the name of the company?": {
+  "cat": "movies",
+  "q": "In Finding Nemo, what is the name of Nemo's dad?",
+  "options": [
+   "Gill",
+   "Marlin",
+   "Crush",
+   "Bruce"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "Which band's debut album was 'Pablo Honey' (1993)?": {
+  "cat": "music",
+  "q": "Which Aussie singer, known for hiding her face, had the hit 'Chandelier'?",
+  "options": [
+   "Kylie Minogue",
+   "Delta Goodrem",
+   "Sia",
+   "Tones and I"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "What was Beyoncé's debut solo studio album?": {
+  "cat": "music",
+  "q": "Which British singer named her albums after her age, like '21' and '25'?",
+  "options": [
+   "Amy Winehouse",
+   "Dua Lipa",
+   "Lily Allen",
+   "Adele"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "Which Daft Punk album includes 'Get Lucky'?": {
+  "cat": "music",
+  "q": "Who sang 'Never Gonna Give You Up', the song behind 'Rickrolling'?",
+  "options": [
+   "Rick Astley",
+   "George Michael",
+   "Phil Collins",
+   "Lionel Richie"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What does the 'GIF' in GIF image stand for?": {
+  "cat": "pop",
+  "q": "In Mario Kart, which item hunts down the racer in first place?",
+  "options": [
+   "Red shell",
+   "Blue shell",
+   "Green shell",
+   "Bullet Bill"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "What was the name of Twitter's bird logo?": {
+  "cat": "pop",
+  "q": "Which Pokémon does Pikachu evolve into?",
+  "options": [
+   "Pichu",
+   "Jolteon",
+   "Raichu",
+   "Plusle"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "Which app was originally launched under the name 'Picaboo'?": {
+  "cat": "pop",
+  "q": "What is the name of Bluey's dad?",
+  "options": [
+   "Bandit",
+   "Chilli",
+   "Rusty",
+   "Stripe"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What was internet-famous Grumpy Cat's real name?": {
+  "cat": "pop",
+  "q": "In Fortnite, what drops players onto the island at the start of a match?",
+  "options": [
+   "Party Plane",
+   "Storm Glider",
+   "Drop Ship",
+   "Battle Bus"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "What was the title of the first video ever uploaded to YouTube?": {
+  "cat": "pop",
+  "q": "Which language-learning app has a green owl mascot called Duo?",
+  "options": [
+   "Babbel",
+   "Duolingo",
+   "Memrise",
+   "Rosetta Stone"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "Which grape is NOT one of Champagne's three main varieties?": {
+  "cat": "food",
+  "q": "The pavlova is named after a ballerina from which country?",
+  "options": [
+   "Russia",
+   "France",
+   "Italy",
+   "Austria"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "Pimm's No. 1 Cup is a liqueur based on which spirit?": {
+  "cat": "food",
+  "q": "Which Italian dessert layers mascarpone with coffee-soaked biscuits?",
+  "options": [
+   "Panna cotta",
+   "Cannoli",
+   "Tiramisu",
+   "Zabaglione"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "The umami taste is mainly triggered by which compound?": {
+  "cat": "food",
+  "q": "Pho is a noodle soup that comes from which country?",
+  "options": [
+   "Thailand",
+   "Vietnam",
+   "Laos",
+   "Cambodia"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "Which opera singer appears on the Australian $100 note?": {
+  "cat": "aussie",
+  "q": "The Melbourne Cup is run at which racecourse?",
+  "options": [
+   "Caulfield",
+   "Randwick",
+   "Flemington",
+   "Moonee Valley"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "How many chambers does a crocodile's heart have?": {
+  "cat": "animals",
+  "q": "What is the largest fish in the world?",
+  "options": [
+   "Whale shark",
+   "Great white shark",
+   "Basking shark",
+   "Blue marlin"
+  ],
+  "a": 0,
+  "d": "hard"
+ },
+ "What word describes animals most active at dawn and dusk?": {
+  "cat": "animals",
+  "q": "What is a baby swan called?",
+  "options": [
+   "Gosling",
+   "Duckling",
+   "Fledgling",
+   "Cygnet"
+  ],
+  "a": 3,
+  "d": "hard"
+ },
+ "Bluetooth is named after what kind of historical figure?": {
+  "cat": "tech",
+  "q": "Bluetooth is named after a Viking king from which modern country?",
+  "options": [
+   "Norway",
+   "Denmark",
+   "Sweden",
+   "Iceland"
+  ],
+  "a": 1,
+  "d": "hard"
+ },
+ "What was Twitter's original name?": {
+  "cat": "tech",
+  "q": "Which company develops the Android operating system?",
+  "options": [
+   "Samsung",
+   "Apple",
+   "Google",
+   "Microsoft"
+  ],
+  "a": 2,
+  "d": "hard"
+ },
+ "What does 'SIM' in SIM card stand for?": {
+  "cat": "tech",
+  "q": "What does the 'S' in HTTPS stand for?",
+  "options": [
+   "Secure",
+   "Server",
+   "Standard",
+   "Safe"
+  ],
+  "a": 0,
+  "d": "hard"
+ }
+};
+  const ADD = [
+    {"cat":"science","q":"What is the boiling point of water in degrees Fahrenheit?","options":["100","180","212","232"],"a":2,"d":"hard"},
+    {"cat":"pop","q":"Which princess does Link usually set out to rescue?","options":["Peach","Daisy","Rosalina","Zelda"],"a":3,"d":"hard"},
+    {"cat":"aussie","q":"Which PM delivered the National Apology to the Stolen Generations in 2008?","options":["Kevin Rudd","John Howard","Julia Gillard","Paul Keating"],"a":0,"d":"hard"},
+    {"cat":"aussie","q":"What is the capital of the Northern Territory?","options":["Alice Springs","Katherine","Darwin","Tennant Creek"],"a":2,"d":"hard"},
+    {"cat":"aussie","q":"The Twelve Apostles rock stacks sit along which famous Victorian road?","options":["Hume Highway","Princes Highway","Pacific Highway","Great Ocean Road"],"a":3,"d":"hard"},
+    {"cat":"tech","q":"Which company created the Walkman portable music player?","options":["Panasonic","Sony","Philips","Toshiba"],"a":1,"d":"hard"},
+    {"cat":"tech","q":"The Python programming language is named after which comedy group?","options":["Monty Python","The Goodies","The Young Ones","Flight of the Conchords"],"a":0,"d":"hard"}
+  ];
+  QUESTIONS.forEach((q, i) => { if (q.d === 'hard' && REPLACE[q.q]) QUESTIONS[i] = REPLACE[q.q]; });
+  QUESTIONS.push(...ADD);
+})();
