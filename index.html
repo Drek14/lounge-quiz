@@ -77,6 +77,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .qt .media{margin-bottom:8px}.qt .media svg,.qt .media img{width:100%;max-height:24vh;object-fit:contain;border-radius:10px;display:block}
 .timer{height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;flex:none}
 .timer i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--good),var(--accent),var(--bad))}
+.opts.typed{display:flex;flex-direction:column;justify-content:flex-start;gap:12px;padding-top:6px}
+.tyin{font:inherit;font-size:22px;font-weight:800;padding:16px;border-radius:14px;border:2px solid var(--accent);background:#0b0f1f;color:#fff;width:100%}
+.tydone{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:18px;padding-top:20px;text-align:center}.tydone .big{font-size:44px}.tydone b{color:var(--accent)}
 .opts{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;min-height:0}
 .ob{border:0;font:inherit;font-weight:900;border-radius:18px;background:var(--c);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px;text-shadow:0 1px 4px rgba(0,0,0,.4);box-shadow:0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .1s,filter .3s;min-height:0;overflow:hidden}
 .ob .l{font-size:34px;line-height:1}.ob .n{font-size:14px;line-height:1.2;text-align:center;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
@@ -180,6 +183,16 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .qmedia.on{display:flex}
 .qmedia svg,.qmedia img{max-width:100%;max-height:100%;border-radius:1.5vh;box-shadow:0 1vh 3vh rgba(0,0,0,.5);object-fit:contain}
 .qmedia svg{width:100%;height:100%}
+.typedq .hopts{display:flex;flex-direction:column;gap:1vh;height:auto;max-height:34vh;min-height:12vh;overflow:auto}
+.tyask{margin:auto;font-size:3.4vh;font-weight:900;color:var(--accent);text-align:center}
+.tyans{display:flex;align-items:center;justify-content:center;gap:1.6vh;font-size:4vh;font-weight:900;background:var(--good);color:#06291c;border-radius:2vh;padding:1.2vh 2vh}.tyans span{font-size:1.8vh;text-transform:uppercase;letter-spacing:.1em;opacity:.7}
+.tylist{display:grid;grid-template-columns:1fr 1fr;gap:.8vh}
+.ty{display:flex;align-items:center;gap:1vh;font:inherit;color:#fff;background:var(--card);border:2px solid var(--line);border-radius:1.6vh;padding:.7vh 1.2vh;text-align:left;cursor:pointer;min-width:0}
+.ty .av{width:3.6vh;height:3.6vh;border-radius:50%;display:grid;place-items:center;background:var(--c);flex:none;font-size:2vh}.ty .nm{font-weight:900;font-size:1.8vh;flex:none;max-width:12vh;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ty .tx{flex:1;font-size:2.2vh;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ty .mk{font-size:2.6vh;font-weight:900}
+.ty.ok{border-color:var(--good);background:rgba(46,229,157,.14)}.ty.ok .mk{color:var(--good)}.ty.no{border-color:rgba(255,77,109,.5)}.ty.no .mk{color:var(--bad)}
+.tyhint{font-size:1.5vh;color:var(--muted);text-align:center}
+.hostty{font:inherit;font-size:2vh;font-weight:800;padding:1vh 1.4vh;border-radius:1.2vh;border:2px solid var(--accent);background:#0b0f1f;color:#fff;width:22vh}
 .hopts{display:grid;grid-template-columns:1fr 1fr;gap:1.4vh;height:28vh;flex:none}
 .opt{display:flex;align-items:center;gap:1.6vh;padding:0 2vh;border-radius:2vh;background:var(--c);font-size:2.9vh;font-weight:900;color:#fff;text-shadow:0 .2vh .6vh rgba(0,0,0,.4);box-shadow:0 .8vh 2vh rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:all .4s;position:relative;min-width:0}
 .opt .l{width:5.4vh;height:5.4vh;border-radius:1.3vh;background:rgba(0,0,0,.3);display:grid;place-items:center;flex:none;font-size:3vh}
@@ -433,7 +446,31 @@ function buildBank() {
 const LEVELS = [['easy', 'Easy'], ['medium', 'Medium'], ['hard', 'Hard'], ['mixed', 'Mixed']], PERPICK = [1, 2, 3, 5];
 const DORDER = { easy: 0, medium: 1, hard: 2 };
 const LENGTHS = [5, 10];
-function defaultSettings() { const d = ls.get('lq_settings', null); return { level: d && d.level || 'mixed', perPick: d && d.perPick || 1, len: d && d.len || 10 }; }
+function defaultSettings() { const d = ls.get('lq_settings', null); return { level: d && d.level || 'mixed', perPick: d && d.perPick || 1, len: d && d.len || 10, mode: d && d.mode || 'choice' }; }
+// questions that only make sense with the options on screen stay multiple choice in typing mode
+const mcOnly = (q) => /[²³ˣ√π∞∫₀-₉⁰-⁹·]/.test(q.options[q.a]) || !!q.svg || !!q.image || /\b(these|NOT|following|of the above)\b/.test(q.q) || /^(Which|What) (is|was) (bigger|larger|smaller)/i.test(q.q) || /^True or false/i.test(q.q) || q.options.some(o => /^(True|False|Yes|No)$/i.test(o));
+const typedFor = (q) => sett().mode === 'typed' && q && !mcOnly(q);
+const norm = (t) => String(t || '').replace(/ø/gi, 'o').replace(/æ/gi, 'ae').replace(/ß/g, 'ss').replace(/(\d),(?=\d{3})/g, '$1').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[−–—]/g, '-').replace(/&/g, ' and ').replace(/[^a-z0-9.\- ]+/g, ' ').replace(/\b(the|a|an)\b/g, ' ').replace(/\s+/g, ' ').trim();
+function lev(a, b) { const m = a.length, n = b.length; if (!m) return n; if (!n) return m; let prev = Array.from({ length: n + 1 }, (_, j) => j); for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; } return prev[n]; }
+// one word: numbers and short words must be exact; longer words allow a typo (two for long ones)
+const wordOk = (x, y) => x === y || (!/\d/.test(x + y) && Math.min(x.length, y.length) >= 5 && lev(x, y) <= (Math.max(x.length, y.length) >= 11 ? 2 : 1));
+const close = (t, a) => { if (t === a) return true; const tw = t.split(' '), aw = a.split(' '); if (tw.length === aw.length && tw.every((w, i) => wordOk(w, aw[i]))) return true; const tj = t.replace(/ /g, ''), aj = a.replace(/ /g, ''); return tj === aj; };
+const nums = (t) => norm(t).match(/-?\d+(\.\d+)?/g) || [];
+const UNITS = /\b(km h|km s|km|m s|years?|yrs?|minutes?|mins?|hours?|yards?|cm|mm|kg|g|m|c|f|s|percent|degrees?|cents?|dollars?)\b/g;
+function typedMatches(text, answer) {
+  const t = norm(text), a = norm(answer); if (!t) return false;
+  if (close(t, a)) return true;
+  const na = nums(answer), nt = nums(text);
+  if (na.length && na.length === nt.length && na.every((x, i) => parseFloat(x) === parseFloat(nt[i]))) {
+    const rest = (x) => x.replace(/-?\d+(\.\d+)?/g, ' ').replace(UNITS, ' ').replace(/[^a-z]+/g, '');
+    if (!rest(t) || rest(t) === rest(a)) return !(a.startsWith('-') !== t.startsWith('-'));
+  }
+  const aw = a.split(' '), last = aw[aw.length - 1];
+  if (aw.length >= 2 && aw[0].length >= 3 && last.length >= 4 && !/\d/.test(last) && wordOk(t, last)) return true; // surname / last word ("Ronaldo", "Utzon")
+  return false;
+}
+// typed answers: the closest option wins; anything that isn't the right one counts as wrong
+function matchTyped(q, text) { if (typedMatches(text, q.options[q.a])) return q.a; const o = q.options.findIndex(x => typedMatches(text, x)); return o >= 0 ? o : 4; }
 const multList = (len) => Array.from({ length: len }, (_, i) => i + 1);
 const gameLen = () => sett().len || 10;
 function freshState(code) { S = { code, phase: 'lobby', players: [], used: [], round: null, roundNo: 0, qDone: 0, lastCat: null, settings: defaultSettings() }; }
@@ -460,9 +497,10 @@ function publicState() {
   const q = currentQ(), show = S.phase === 'reveal' || S.phase === 'scoreboard';
   return { code: S.code, phase: S.phase, roundNo: S.roundNo, qDone: S.qDone || 0, lastCat: S.lastCat, settings: sett(), config: { ...CONFIG, multipliers: multList(gameLen()) }, hostTime: now(),
     categories: CATEGORIES.map(c => ({ ...c, remaining: remainingIn(c.id), atLevel: levelLeft(c.id) })),
-    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], answered: p.answer != null, answer: show ? p.answer : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
+    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], answered: p.answer != null, answer: show ? p.answer : undefined, typed: show ? p.typed : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
     round: S.round ? { catId: S.round.catId, catName: S.round.catName, color: S.round.color, icon: S.round.icon, qIndex: S.round.qIndex, total: S.round.qs.length, deadline: S.round.deadline,
-      question: q && S.phase !== 'multiplier' ? { text: q.q, options: q.options, svg: q.svg, image: q.image, d: q.d, correct: show ? q.a : undefined } : null, nextD: q ? q.d : null } : null };
+      typed: !!S.round.typed, secs: S.round.secs,
+      question: q && S.phase !== 'multiplier' ? { text: q.q, options: S.round.typed && !show ? null : q.options, svg: q.svg, image: q.image, d: q.d, correct: show ? q.a : undefined } : null, nextD: q ? q.d : null } : null };
 }
 function save() { ls.set('lq_host', S); }
 function broadcast() { save(); const st = publicState(); pub(base(S.code) + '/state', st, true); HS = st; renderHost(); }
@@ -505,33 +543,42 @@ function setMultiplier(p, m) {
 function startQuestion() {
   if (S.phase !== 'multiplier') throw new Error('Pick a category first');
   clearTimers();
-  S.players.forEach(p => { if (p.mult == null) p.mult = multList(gameLen()).find(m => !(p.used || []).includes(m)) || 1; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
-  S.phase = 'question'; S.round.deadline = now() + CONFIG.questionSeconds * 1000;
-  timer = setTimeout(() => { timer = null; if (S.phase === 'question') { reveal(); broadcast(); } }, CONFIG.questionSeconds * 1000 + 400);
+  S.players.forEach(p => { if (p.mult == null) p.mult = multList(gameLen()).find(m => !(p.used || []).includes(m)) || 1; p.typed = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
+  const q0 = currentQ(); S.round.typed = typedFor(q0); S.round.secs = S.round.typed ? 30 : CONFIG.questionSeconds;
+  S.phase = 'question'; S.round.deadline = now() + S.round.secs * 1000;
+  timer = setTimeout(() => { timer = null; if (S.phase === 'question') { reveal(); broadcast(); } }, S.round.secs * 1000 + 400);
 }
-function answer(p, choice) {
+function answer(p, choice, text) {
   if (S.phase !== 'question') throw new Error('Not accepting answers');
   if (p.answer != null) throw new Error('Already answered');
   if (now() > S.round.deadline + 500) throw new Error('Too late');
-  choice = parseInt(choice, 10); if (!(choice >= 0 && choice < 4)) throw new Error('Bad answer');
+  if (S.round.typed) { text = String(text || '').trim().slice(0, 40); if (!text) throw new Error('Type an answer'); p.typed = text; choice = matchTyped(currentQ(), text); }
+  else { choice = parseInt(choice, 10); if (!(choice >= 0 && choice < 4)) throw new Error('Bad answer'); p.typed = null; }
   p.answer = choice; p.answeredAt = now();
   if (claimed().every(x => x.answer != null)) { clearTimers(); timer = setTimeout(() => { timer = null; if (S.phase === 'question') { reveal(); broadcast(); } }, 600); }
 }
 function reveal() {
   if (S.phase !== 'question') throw new Error('Nothing to reveal');
   clearTimers();
-  const q = currentQ(), startedAt = S.round.deadline - CONFIG.questionSeconds * 1000;
+  const q = currentQ(), secs = S.round.secs || CONFIG.questionSeconds, startedAt = S.round.deadline - secs * 1000;
   S.players.forEach(p => {
     if (!p.pid) { p.delta = 0; p.correct = null; return; }
     const m = p.mult || 1;
     if (p.answer == null) { p.correct = false; p.delta = 0; }
-    else if (p.answer === q.a) { const f = Math.max(0, Math.min(1, 1 - (p.answeredAt - startedAt) / (CONFIG.questionSeconds * 1000))); p.correct = true; p.delta = CONFIG.base * m + Math.round(CONFIG.speedBonus * f); }
+    else if (p.answer === q.a) { const f = Math.max(0, Math.min(1, 1 - (p.answeredAt - startedAt) / (secs * 1000))); p.correct = true; p.delta = CONFIG.base * m + Math.round(CONFIG.speedBonus * f); }
     else { p.correct = false; p.delta = 0; }
     p.score += p.delta;
     p.used = (p.used || []).concat(m);
   });
   S.qDone = (S.qDone || 0) + 1;
   S.phase = 'reveal';
+}
+function flipTyped(id) {
+  if (S.phase !== 'reveal' || !S.round.typed) throw new Error('Only for typed answers');
+  const p = S.players.find(x => x.id === id); if (!p || !p.pid || p.typed == null) return;
+  const m = p.mult || 1; p.score -= p.delta;
+  if (p.correct) { p.correct = false; p.delta = 0; } else { p.correct = true; p.delta = CONFIG.base * m; }
+  p.score += p.delta;
 }
 function next() {
   if (S.phase === 'reveal') {
@@ -556,7 +603,7 @@ function hostAct(a) {
       case 'hostMe': claimPlayer(a.id, 'host'); break;
       case 'hostNotMe': S.players.forEach(p => { if (p.pid === 'host') p.pid = null; }); break;
       case 'hostMult': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); setMultiplier(me, a.mult); break; }
-      case 'hostAnswer': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); answer(me, a.choice); break; }
+      case 'hostAnswer': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); answer(me, a.choice, a.text); break; }
       case 'start': startGame(); break;
       case 'category': pickCategory(a.cat); break;
       case 'go': startQuestion(); break;
@@ -567,6 +614,8 @@ function hostAct(a) {
       case 'resetScores': clearTimers(); S.players.forEach(p => { p.score = 0; p.mult = null; p.used = []; p.answer = null; }); S.round = null; S.roundNo = 0; S.qDone = 0; S.lastCat = null; S.phase = 'category'; break;
       case 'setLevel': if (!LEVELS.some(l => l[0] === a.level)) throw new Error('Bad level'); sett().level = a.level; ls.set('lq_settings', sett()); break;
       case 'setLen': if (!LENGTHS.includes(a.n)) throw new Error('Bad length'); if (S.qDone) throw new Error('Change game length before the first question'); sett().len = a.n; ls.set('lq_settings', sett()); break;
+      case 'setMode': if (!['choice', 'typed'].includes(a.mode)) throw new Error('Bad mode'); sett().mode = a.mode; ls.set('lq_settings', sett()); break;
+      case 'flip': flipTyped(a.id); break;
       case 'setPerPick': if (!PERPICK.includes(a.n)) throw new Error('Bad number'); sett().perPick = a.n; ls.set('lq_settings', sett()); break;
       case 'lobby': clearTimers(); S.round = null; S.phase = 'lobby'; break;
       case 'reset': clearTimers(); freshState(S.code); qrDone = false; break;
@@ -583,7 +632,7 @@ function onPlayerMsg(d) {
     else if (d.type === 'leave') { if (p) p.pid = null; }
     else if (!p) throw new Error('Tap your name to join first');
     else if (d.type === 'mult') setMultiplier(p, parseInt(d.mult, 10));
-    else if (d.type === 'answer') answer(p, d.choice);
+    else if (d.type === 'answer') answer(p, d.choice, d.text);
     broadcast();
   } catch (e) { err(d.pid, e.message); }
 }
@@ -633,10 +682,11 @@ function renderHost() {
 function setupHtml() {
   const st = HS.settings;
   const seg = (items, cur, act) => `<div class="seg">${items.map(([v, l]) => `<button class="${cur === v ? 'on' : ''}" onclick='hostAct(${JSON.stringify(act(v))})'>${l}</button>`).join('')}</div>`;
-  return `<div class="sg"><span class="lbl">Difficulty</span>${seg(LEVELS, st.level, v => ({ type: 'setLevel', level: v }))}</div>`
+  return `<div class="sg"><span class="lbl">Answers</span>${seg([['choice', 'A B C D'], ['typed', '⌨️ Type it']], st.mode || 'choice', v => ({ type: 'setMode', mode: v }))}</div>`
+    + `<div class="sg"><span class="lbl">Difficulty</span>${seg(LEVELS, st.level, v => ({ type: 'setLevel', level: v }))}</div>`
     + `<div class="sg"><span class="lbl">Game</span>${seg(LENGTHS.map(n => [n, n + ' Qs · ×1–×' + n]), st.len || 10, v => ({ type: 'setLen', n: v }))}</div>`
     + `<div class="sg"><span class="lbl">Per category</span>${seg(PERPICK.map(n => [n, String(n)]), st.perPick, v => ({ type: 'setPerPick', n: v }))}</div>`
-    + `<div class="hint">Everyone gets ×1 to ×${st.len || 10} — each multiplier used once · ${st.perPick === 1 ? 'new category every question' : st.perPick + ' questions per category'}</div>`;
+    + `<div class="hint">${st.mode === 'typed' ? 'Type the answer (30 s, small typos OK, picture questions stay A–D) · ' : ''}Everyone gets ×1 to ×${st.len || 10} — each multiplier used once · ${st.perPick === 1 ? 'new category every question' : st.perPick + ' questions per category'}</div>`;
 }
 const levelName = (d) => d === 'easy' ? 'Easy' : d === 'hard' ? 'Hard' : 'Medium';
 function renderLobby() {
@@ -690,10 +740,17 @@ function renderQuestionH() {
   $('#qtext').textContent = q.text;
   const m = $('#qmedia');
   if (q.svg) { m.classList.add('on'); m.innerHTML = q.svg; } else if (q.image) { m.classList.add('on'); m.innerHTML = `<img src="${q.image}" alt="">`; } else { m.classList.remove('on'); m.innerHTML = ''; }
-  $('#hopts').innerHTML = q.options.map((o, i) => { const who = rv ? HS.players.filter(p => p.answer === i).map(p => `<span style="--pc:${p.color}">${p.avatar}</span>`).join('') : ''; return `<div class="opt ${rv && q.correct === i ? 'correct' : ''}" style="--c:${LC[i]}"><div class="l">${LETTERS[i]}</div><div class="n">${esc(o)}</div><div class="who">${who}</div></div>`; }).join('');
+  $('#hv-question').classList.toggle('typedq', !!r.typed);
+  if (r.typed) { renderTypedH(r, q, rv); }
+  else $('#hopts').innerHTML = q.options.map((o, i) => { const who = rv ? HS.players.filter(p => p.answer === i).map(p => `<span style="--pc:${p.color}">${p.avatar}</span>`).join('') : ''; return `<div class="opt ${rv && q.correct === i ? 'correct' : ''}" style="--c:${LC[i]}"><div class="l">${LETTERS[i]}</div><div class="n">${esc(o)}</div><div class="who">${who}</div></div>`; }).join('');
   cancelAnimationFrame(raf);
-  if (!rv) { const total = CONFIG.questionSeconds * 1000; const tick = () => { const left = Math.max(0, r.deadline - now()); $('#htbar').style.transform = `scaleX(${left / total})`; $('#hq-t').textContent = Math.ceil(left / 1000); if (left > 0 && HS.phase === 'question') raf = requestAnimationFrame(tick); }; tick(); }
+  if (!rv) { const total = (r.secs || CONFIG.questionSeconds) * 1000; const tick = () => { const left = Math.max(0, r.deadline - now()); $('#htbar').style.transform = `scaleX(${left / total})`; $('#hq-t').textContent = Math.ceil(left / 1000); if (left > 0 && HS.phase === 'question') raf = requestAnimationFrame(tick); }; tick(); }
   else { $('#htbar').style.transform = 'scaleX(0)'; $('#hq-t').textContent = ''; }
+}
+function renderTypedH(r, q, rv) {
+  if (!rv) { $('#hopts').innerHTML = `<div class="tyask">⌨️ Type your answer on your phone</div>`; return; }
+  const ps = HS.players.filter(p => p.pid);
+  $('#hopts').innerHTML = `<div class="tyans"><span>Answer</span>${esc(q.options[q.correct])}</div><div class="tylist">` + ps.map(p => `<button class="ty ${p.correct ? 'ok' : 'no'}" style="--c:${p.color}" onclick="hostAct({type:'flip',id:'${p.id}'})" title="Tap to mark right/wrong"><span class="av">${p.avatar}</span><span class="nm">${esc(p.name)}</span><span class="tx">${p.typed != null ? esc(p.typed) : '—'}</span><span class="mk">${p.correct ? '✓' : '✗'}</span></button>`).join('') + `</div><div class="tyhint">Host: tap an answer to mark it right or wrong</div>`;
 }
 const crown = (p) => p.pid === 'host' ? '👑 ' : '';
 const ranked = (ps) => [...ps].sort((a, b) => b.score - a.score);
@@ -737,7 +794,8 @@ function renderCtl() {
   const p = primary(), ph = HS.phase; let h = '';
   const me = HS.players.find(x => x.pid === 'host');
   if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => me.used.includes(m) ? `<button class="btn mybtn usedm" disabled>×${m}</button>` : `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
-  if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
+  if (me && ph === 'question' && HS.round.typed) h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : `<input id="hosttype" class="hostty" placeholder="type answer" maxlength="40" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')hostType()"><button class="btn mybtn" onclick="hostType()">Lock</button>`) + `<span class="sep"></span>`;
+  else if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
   const playing = me && (ph === 'multiplier' || ph === 'question');
   if (ph === 'lobby') h += `<button class="btn ghost" onclick="shareLink()">💬 Text link</button><button class="btn ghost" onclick="openSheet()">📸 Photos</button>`;
   else h += `<button class="btn ghost" onclick="hostAct({type:'lobby'})" title="Back to the lobby, keeps players and scores">Lobby</button>`;
@@ -746,8 +804,11 @@ function renderCtl() {
   if (ph === 'scoreboard' || ph === 'category') h += `<button class="btn ${endArm ? 'bad' : 'ghost'}" onclick="endGame()">${endArm ? 'Tap again to end' : 'End game'}</button>`;
   if (ph === 'final') h += `<button class="btn good" onclick="hostAct({type:'resetScores'})">Play again (new questions)</button>`;
   if (p) h += `<button class="btn ${p.cls || ''}" onclick='hostAct(${JSON.stringify(p.act)})'>${p.label}</button>`;
+  const keepT = $('#hosttype') ? $('#hosttype').value : null, foc = document.activeElement && document.activeElement.id === 'hosttype';
   $('#ctl').innerHTML = h;
+  if ($('#hosttype') && keepT != null) { $('#hosttype').value = keepT; if (foc) $('#hosttype').focus(); }
 }
+function hostType() { const i = $('#hosttype'); if (!i || !i.value.trim()) return; hostAct({ type: 'hostAnswer', text: i.value }); }
 function endGame() { if (!endArm) { endArm = true; renderCtl(); setTimeout(() => { endArm = false; renderCtl(); }, 3000); return; } endArm = false; hostAct({ type: 'end' }); }
 function restartGame() { if (!restartArm) { restartArm = true; renderCtl(); setTimeout(() => { restartArm = false; renderCtl(); }, 3000); return; } restartArm = false; hostAct({ type: 'reset' }); toast('Fresh game — everyone taps their name again', true); }
 async function shareLink() {
@@ -805,6 +866,8 @@ function leave() { send({ type: 'leave' }); me = null; renderPlayer(); }
 function joinNew() { const name = $('#name').value.trim(); if (!name) return toast('Type a name'); send({ type: 'join', name, avatar }); }
 function claim(id) { send({ type: 'claim', id, avatar }); }
 function pickMult(m) { if (picked != null) return; const me0 = mine(); if (me0 && me0.used.includes(m)) return; picked = m; renderMult(); send({ type: 'mult', mult: m }); }
+let typedMine = '';
+function sendTyped() { const v = ($('#tyin') && $('#tyin').value || '').trim(); if (!v || chosen != null) return; chosen = 0; typedMine = v; try { $('#tyin').blur(); } catch {} $('#opts').innerHTML = ''; renderQuestionP(); send({ type: 'answer', text: v }); if (navigator.vibrate) navigator.vibrate(30); }
 function pickAnswer(i) { if (chosen != null) return; chosen = i; renderQuestionP(); send({ type: 'answer', choice: i }); if (navigator.vibrate) navigator.vibrate(30); }
 const mine = () => PS ? PS.players.find(p => p.pid === pid) : null;
 const myRank = () => ranked(PS.players).findIndex(p => p.pid === pid) + 1;
@@ -820,7 +883,7 @@ function renderPlayer() {
   const ph = PS.phase;
   if (ph === 'lobby') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎉'; $('#w-t').textContent = "You're in!"; $('#w-s').textContent = 'Watch the TV — the host will start soon'; }
   else if (ph === 'category') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎲'; $('#w-t').textContent = 'Picking a category…'; $('#w-s').textContent = 'Shout your preference at the host'; }
-  else if (ph === 'multiplier') { const k = PS.roundNo + ':' + PS.round.qIndex; if (lastQ !== k) { picked = null; chosen = null; lastQ = k; } showIn('.view', 'v-multiplier'); renderMult(); }
+  else if (ph === 'multiplier') { const k = PS.roundNo + ':' + PS.round.qIndex; if (lastQ !== k) { picked = null; chosen = null; typedMine = ''; lastQ = k; $('#opts').innerHTML = ''; } showIn('.view', 'v-multiplier'); renderMult(); }
   else if (ph === 'question') { showIn('.view', 'v-question'); renderQuestionP(); }
   else if (ph === 'reveal') { showIn('.view', 'v-reveal'); renderReveal(); }
   else if (ph === 'scoreboard' || ph === 'final') { showIn('.view', 'v-score'); renderScore(ph === 'final'); }
@@ -847,19 +910,28 @@ function renderQuestionP() {
   const q = PS.round.question, p = mine(), ans = p && p.answered ? (chosen ?? -1) : chosen;
   const media = q.svg ? `<div class="media">${q.svg}</div>` : q.image ? `<div class="media"><img src="${q.image}" alt=""></div>` : '';
   $('#qt').innerHTML = media + esc(q.text);
+  $('#opts').classList.toggle('typed', !!PS.round.typed);
+  if (PS.round.typed) {
+    if ($('#tyin') && chosen == null) {} // keep the input (and keyboard) while they type
+    else $('#opts').innerHTML = chosen != null || (p && p.answered)
+      ? `<div class="tydone"><div class="big">🔒</div><div>Locked in: <b>${esc(typedMine || '')}</b></div></div>`
+      : `<input id="tyin" class="tyin" placeholder="Type your answer" maxlength="40" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" onkeydown="if(event.key==='Enter')sendTyped()"><button class="btn good" onclick="sendTyped()">Lock in ⌨️</button>`;
+    $('#q-status').textContent = chosen != null || (p && p.answered) ? `Locked in ✓  (×${p ? p.mult : 1})` : `×${p ? p.mult : 1} — small typos are fine`;
+    if ($('#tyin') && !$('#tyin')._f) { $('#tyin')._f = 1; setTimeout(() => { try { $('#tyin').focus(); } catch {} }, 50); }
+  } else
   $('#opts').innerHTML = q.options.map((o, i) => `<button class="ob ${ans === i ? 'sel' : ans != null ? 'dim' : ''}" style="--c:${LC[i]}" onclick="pickAnswer(${i})"><div class="l">${LETTERS[i]}</div><div class="n">${esc(o)}</div></button>`).join('');
-  $('#q-status').textContent = ans != null ? `Locked in ${LETTERS[ans] || ''} ✓  (×${p.mult})` : `×${p ? p.mult : 1} — tap your answer`;
+  if (!PS.round.typed) $('#q-status').textContent = ans != null ? `Locked in ${LETTERS[ans] || ''} ✓  (×${p.mult})` : `×${p ? p.mult : 1} — tap your answer`;
   cancelAnimationFrame(praf);
-  const total = PS.config.questionSeconds * 1000;
+  const total = (PS.round.secs || PS.config.questionSeconds) * 1000;
   const tick = () => { if (!PS.round || PS.phase !== 'question') return; const left = Math.max(0, PS.round.deadline - (now() + offset)); $('#tbar').style.transform = `scaleX(${left / total})`; if (left > 0) praf = requestAnimationFrame(tick); };
   tick();
 }
 function renderReveal() {
   const p = mine(), q = PS.round.question, r = $('#result');
   if (p.answer == null) { r.className = 'result na'; r.innerHTML = `<div class="d">⏱️</div><h1>Too slow</h1><div class="m">No answer, no points</div>`; }
-  else if (p.correct) { r.className = 'result ok'; r.innerHTML = `<div class="d">+${p.delta}</div><h1>Correct! 🎉</h1><div class="m">×${p.mult}${p.delta > PS.config.base * p.mult ? ' + ' + (p.delta - PS.config.base * p.mult) + ' speed bonus' : ''}</div>`; if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
-  else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬</h1><div class="m">You picked ${LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
-  $('#r-correct').textContent = `Answer: ${LETTERS[q.correct]} — ${q.options[q.correct]}`;
+  else if (p.correct) { r.className = 'result ok'; r.innerHTML = `<div class="d">+${p.delta}</div><h1>Correct! 🎉</h1><div class="m">${p.typed != null ? '“' + esc(p.typed) + '” · ' : ''}×${p.mult}${p.delta > PS.config.base * p.mult ? ' + ' + (p.delta - PS.config.base * p.mult) + ' speed bonus' : ''}</div>`; if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
+  else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬</h1><div class="m">${p.typed != null ? 'You typed “' + esc(p.typed) + '”' : 'You picked ' + LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
+  $('#r-correct').textContent = PS.round.typed ? `Answer: ${q.options[q.correct]}` : `Answer: ${LETTERS[q.correct]} — ${q.options[q.correct]}`;
 }
 function renderScore(final) {
   const rk = myRank(), p = mine();
