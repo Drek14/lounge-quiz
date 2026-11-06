@@ -66,6 +66,15 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .view.on{display:flex}
 @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .big{font-size:64px;line-height:1}
+#v-multiplier.gamble h1{color:#ff5dd6}
+.bet{display:flex;flex-direction:column;gap:14px;justify-content:center;flex:1}
+.betnum{font-size:64px;font-weight:900;text-align:center;color:var(--accent);line-height:1}.betnum small{font-size:18px;color:var(--muted);margin-left:6px}
+.bet input[type=range]{width:100%;accent-color:#ff5dd6;height:34px}
+.bchips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bchip{border:0;font:inherit;font-weight:900;font-size:15px;color:#fff;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:2px}.bchip small{font-size:11px;color:var(--muted)}
+.bchip.on{border-color:#ff5dd6;background:rgba(255,93,214,.18)}
+.bwin{text-align:center;font-size:15px;color:var(--muted)}.bwin b{color:#fff}
+.betdone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:20px;flex:1}.betdone .big{font-size:56px}.betdone b{color:var(--accent)}
 .mults{flex:1;display:grid;grid-template-rows:1fr 1fr 1fr;gap:12px}
 .mults.ten{grid-template-rows:none;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:9px}.mults.ten .mb .x{font-size:32px}.mults.ten .mb{border-radius:16px}
 .mb.used{background:#1a1f33;color:#5b6385;box-shadow:none;border:1px dashed #333b5c}.mb.used .x{text-decoration:line-through;text-decoration-thickness:3px}
@@ -174,6 +183,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .q{flex-direction:column;gap:1.2vh}
 .timer.h{height:1.3vh;border-radius:1vh}
 .qhead{display:flex;align-items:center;justify-content:space-between;font-size:2vh;color:var(--muted);gap:1vh}
+.dchip.gam{background:rgba(255,93,214,.22);color:#ff5dd6}
 .dchip.hard{background:rgba(255,77,109,.22);color:var(--bad)}
 .dchip{display:inline-block;padding:.15em .7em;border-radius:999px;font-size:.85em;font-weight:900;margin-left:.5em;background:rgba(46,229,157,.2);color:var(--good);vertical-align:middle}.dchip.medium{background:rgba(255,190,11,.2);color:var(--accent)}
 .qhead .t{font-size:3.4vh;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;min-width:2em;text-align:right}
@@ -254,6 +264,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .slot .mebtn + .x{margin-left:.6vh}
 .pp.me,.pcard.me{border:2px solid var(--accent)}
 .ctl .btn.big{font-size:2.6vh;padding:1.5vh 3vh;box-shadow:0 .6vh 0 rgba(0,0,0,.35),0 0 3vh rgba(46,229,157,.25)}.ctl .btn.big small{font-size:.65em;opacity:.75;margin-left:.6em}
+.ctl .btn.gambleon{background:linear-gradient(135deg,#ff2e97,#ffbe0b);color:#111;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 3vh rgba(255,46,151,.7)}}
+.hv-multiplier.gamble h1,#hv-multiplier.gamble h1{color:#ff5dd6}
+.pcard .pts{font-size:1.6vh;color:var(--muted);font-weight:800}
 .ctl .btn{width:auto;font-size:2vh;padding:1.2vh 2vh;border-radius:1.4vh;white-space:nowrap}
 /* photo builder */
 .sheet{position:fixed;inset:0;background:rgba(5,8,20,.92);z-index:20;display:none;flex-direction:column;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overflow:auto}
@@ -317,7 +331,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 
   <div class="view" id="v-multiplier">
     <h2 id="m-sub"></h2>
-    <h1>How confident are you?</h1>
+    <h1 id="mtitleP">How confident are you?</h1>
     <div class="mults" id="mults"></div>
     <h2 id="m-status" style="text-align:center"></h2>
   </div>
@@ -359,7 +373,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
       </div>
     </div>
     <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="setup small" id="setup-cat"></div><div class="catgrid" id="catgrid"></div></div>
-    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>⚡ Pick your multiplier — quick!</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2 id="mhint">Greyed numbers are already used · host taps <b>Ready for question</b></h2></div>
+    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1 id="mtitle">⚡ Pick your multiplier — quick!</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2 id="mhint">Greyed numbers are already used · host taps <b>Ready for question</b></h2></div>
     <div class="hv q" id="hv-question">
       <div class="timer h"><i id="htbar"></i></div>
       <div class="qhead"><span id="hq-sub"></span><span id="hq-ans"></span><span class="t" id="hq-t"></span></div>
@@ -474,6 +488,8 @@ function typedMatches(text, answer) {
 function matchTyped(q, text) { if (typedMatches(text, q.options[q.a])) return q.a; const o = q.options.findIndex(x => typedMatches(text, x)); return o >= 0 ? o : 4; }
 const multList = (len) => Array.from({ length: len }, (_, i) => i + 1);
 const gameLen = () => sett().len || 10;
+const mq = () => (S.qDone || 0) - (S.gq || 0); // multiplier questions played (gambles are bonus)
+const maxWager = (p) => Math.max(p.score, 100);
 function freshState(code) { S = { code, phase: 'lobby', players: [], used: [], round: null, roundNo: 0, qDone: 0, lastCat: null, settings: defaultSettings() }; }
 const sett = () => S.settings || (S.settings = defaultSettings());
 // questions for a category at the chosen level, falling back to the nearest level if that one has run out
@@ -496,11 +512,11 @@ const remainingIn = (c) => BANK.filter(q => q.cat === c && !S.used.includes(q.id
 const currentQ = () => S.round ? BANK.find(q => q.id === S.round.qs[S.round.qIndex]) : null;
 function publicState() {
   const q = currentQ(), show = S.phase === 'reveal' || S.phase === 'scoreboard';
-  return { code: S.code, phase: S.phase, roundNo: S.roundNo, qDone: S.qDone || 0, lastCat: S.lastCat, settings: sett(), config: { ...CONFIG, multipliers: multList(gameLen()) }, hostTime: now(),
+  return { code: S.code, phase: S.phase, roundNo: S.roundNo, qDone: S.qDone || 0, mq: mq(), lastCat: S.lastCat, settings: sett(), config: { ...CONFIG, multipliers: multList(gameLen()) }, hostTime: now(),
     categories: CATEGORIES.map(c => ({ ...c, remaining: remainingIn(c.id), atLevel: levelLeft(c.id) })),
-    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], answered: p.answer != null, answer: show ? p.answer : undefined, typed: show ? p.typed : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
+    players: S.players.map(p => ({ id: p.id, name: p.name, avatar: p.avatar, color: p.color, score: p.score, pid: p.pid || null, mult: p.mult, used: p.used || [], wagered: p.wager != null, wager: show ? p.wager : undefined, maxWager: maxWager(p), answered: p.answer != null, answer: show ? p.answer : undefined, typed: show ? p.typed : undefined, correct: show ? p.correct : undefined, delta: show ? p.delta : undefined })),
     round: S.round ? { catId: S.round.catId, catName: S.round.catName, color: S.round.color, icon: S.round.icon, qIndex: S.round.qIndex, total: S.round.qs.length, deadline: S.round.deadline,
-      typed: !!S.round.typed, secs: S.round.secs,
+      typed: !!S.round.typed, secs: S.round.secs, gamble: !!S.round.gamble,
       question: q && S.phase !== 'multiplier' ? { text: q.q, options: S.round.typed && !show ? null : q.options, svg: q.svg, image: q.image, d: q.d, correct: show ? q.a : undefined } : null, nextD: q ? q.d : null } : null };
 }
 function save() { ls.set('lq_host', S); }
@@ -527,15 +543,22 @@ function startGame() { if (!S.players.length) throw new Error('Add at least one 
 function pickCategory(catId) {
   const meta = catMeta(catId); if (!meta) throw new Error('Unknown category');
   if (sett().perPick === 1 && S.lastCat === catId && CATEGORIES.some(c => c.id !== catId && remainingIn(c.id))) throw new Error('Pick a different category to last time');
-  const pick = poolFor(catId, Math.min(sett().perPick, Math.max(1, gameLen() - (S.qDone || 0))));
+  const pick = poolFor(catId, Math.min(sett().perPick, Math.max(1, gameLen() - mq())));
   if (!pick.length) throw new Error('No questions left in that category');
   const qs = pick.map(q => q.id); S.used.push(...qs);
   S.roundNo++; S.lastCat = catId; S.round = { catId, catName: meta.name, color: meta.color, icon: meta.icon, qs, qIndex: 0, deadline: null };
-  S.players.forEach(p => { p.mult = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
+  S.players.forEach(p => { p.mult = null; p.wager = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
   S.phase = 'multiplier';
+}
+function setWager(p, amt) {
+  if (S.phase !== 'multiplier' || !S.round.gamble) throw new Error('Not a gamble question');
+  amt = Math.round(Number(amt)); if (!(amt >= 0)) throw new Error('Enter a number');
+  if (amt > maxWager(p)) throw new Error('Max bet is ' + maxWager(p));
+  p.wager = amt;
 }
 function setMultiplier(p, m) {
   if (S.phase !== 'multiplier') throw new Error('Not the time to pick a multiplier');
+  if (S.round.gamble) throw new Error('This one is a gamble — pick your bet');
   if (!multList(gameLen()).includes(m)) throw new Error('Bad multiplier');
   if ((p.used || []).includes(m)) throw new Error('You already used ×' + m);
   p.mult = m;
@@ -544,7 +567,7 @@ function setMultiplier(p, m) {
 function startQuestion() {
   if (S.phase !== 'multiplier') throw new Error('Pick a category first');
   clearTimers();
-  S.players.forEach(p => { if (p.mult == null) p.mult = multList(gameLen()).find(m => !(p.used || []).includes(m)) || 1; p.typed = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
+  S.players.forEach(p => { if (S.round.gamble) { p.mult = null; if (p.wager == null) p.wager = 0; } else if (p.mult == null) p.mult = multList(gameLen()).find(m => !(p.used || []).includes(m)) || 1; p.typed = null; p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
   const q0 = currentQ(); S.round.typed = typedFor(q0); S.round.secs = S.round.typed ? 30 : CONFIG.questionSeconds;
   S.phase = 'question'; S.round.deadline = now() + S.round.secs * 1000;
   timer = setTimeout(() => { timer = null; if (S.phase === 'question') { reveal(); broadcast(); } }, S.round.secs * 1000 + 400);
@@ -564,6 +587,7 @@ function reveal() {
   const q = currentQ(), secs = S.round.secs || CONFIG.questionSeconds, startedAt = S.round.deadline - secs * 1000;
   S.players.forEach(p => {
     if (!p.pid) { p.delta = 0; p.correct = null; return; }
+    if (S.round.gamble) { const w = p.wager || 0; p.correct = p.answer != null && p.answer === q.a; p.delta = p.correct ? w : -w; p.score += p.delta; return; }
     const m = p.mult || 1;
     if (p.answer == null) { p.correct = false; p.delta = 0; }
     else if (p.answer === q.a) { const f = Math.max(0, Math.min(1, 1 - (p.answeredAt - startedAt) / (secs * 1000))); p.correct = true; p.delta = CONFIG.base * m + Math.round(CONFIG.speedBonus * f); }
@@ -571,26 +595,27 @@ function reveal() {
     p.score += p.delta;
     p.used = (p.used || []).concat(m);
   });
-  S.qDone = (S.qDone || 0) + 1;
+  S.qDone = (S.qDone || 0) + 1; if (S.round.gamble) S.gq = (S.gq || 0) + 1;
   S.phase = 'reveal';
 }
 function flipTyped(id) {
   if (S.phase !== 'reveal' || !S.round.typed) throw new Error('Only for typed answers');
   const p = S.players.find(x => x.id === id); if (!p || !p.pid || p.typed == null) return;
   const m = p.mult || 1; p.score -= p.delta;
-  if (p.correct) { p.correct = false; p.delta = 0; } else { p.correct = true; p.delta = CONFIG.base * m; }
+  if (S.round.gamble) { p.correct = !p.correct; p.delta = p.correct ? (p.wager || 0) : -(p.wager || 0); }
+  else if (p.correct) { p.correct = false; p.delta = 0; } else { p.correct = true; p.delta = CONFIG.base * m; }
   p.score += p.delta;
 }
 function next() {
   if (S.phase === 'reveal') {
-    if ((S.qDone || 0) >= gameLen()) { clearTimers(); S.round = null; S.phase = 'final'; recordGame(); return; }
+    if (mq() >= gameLen()) { clearTimers(); S.round = null; S.phase = 'final'; recordGame(); return; }
     S.round.qIndex++;
     if (S.round.qIndex >= S.round.qs.length) {
       if (sett().perPick === 1 && S.qDone % 5 !== 0) { S.round = null; S.phase = 'category'; return; }
       S.phase = 'scoreboard'; return;
     }
     S.players.forEach(p => { p.answer = null; p.answeredAt = null; p.delta = 0; p.correct = null; });
-    if (CONFIG.multiplierPer === 'question') { S.players.forEach(p => p.mult = null); S.phase = 'multiplier'; } else { S.phase = 'multiplier'; startQuestion(); }
+    if (CONFIG.multiplierPer === 'question') { S.players.forEach(p => { p.mult = null; p.wager = null; }); S.round.gamble = false; S.phase = 'multiplier'; } else { S.phase = 'multiplier'; startQuestion(); }
   } else if (S.phase === 'scoreboard') { S.round = null; S.phase = 'category'; }
   else if (S.phase === 'multiplier') startQuestion();
   else if (S.phase === 'question') reveal();
@@ -612,11 +637,13 @@ function hostAct(a) {
       case 'next': next(); break;
       case 'skipRound': clearTimers(); S.round = null; S.phase = 'category'; break;
       case 'end': clearTimers(); S.phase = 'final'; recordGame(); break;
-      case 'resetScores': clearTimers(); S.players.forEach(p => { p.score = 0; p.mult = null; p.used = []; p.answer = null; }); S.round = null; S.roundNo = 0; S.qDone = 0; S.lastCat = null; S.phase = 'category'; break;
+      case 'resetScores': clearTimers(); S.players.forEach(p => { p.score = 0; p.mult = null; p.used = []; p.answer = null; }); S.round = null; S.roundNo = 0; S.qDone = 0; S.gq = 0; S.lastCat = null; S.phase = 'category'; break;
       case 'setLevel': if (!LEVELS.some(l => l[0] === a.level)) throw new Error('Bad level'); sett().level = a.level; ls.set('lq_settings', sett()); break;
       case 'setLen': if (!LENGTHS.includes(a.n)) throw new Error('Bad length'); if (S.qDone) throw new Error('Change game length before the first question'); sett().len = a.n; ls.set('lq_settings', sett()); break;
       case 'setMode': if (!['choice', 'typed'].includes(a.mode)) throw new Error('Bad mode'); sett().mode = a.mode; ls.set('lq_settings', sett()); break;
       case 'flip': flipTyped(a.id); break;
+      case 'gamble': if (S.phase !== 'multiplier') throw new Error('Gamble is picked before the question'); S.round.gamble = !S.round.gamble; S.players.forEach(p => { p.mult = null; p.wager = null; }); break;
+      case 'hostWager': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); setWager(me, a.amount); break; }
       case 'randomCat': { const ok = CATEGORIES.filter(c => c.id !== 'photo' && remainingIn(c.id) && !(sett().perPick === 1 && c.id === S.lastCat)); if (!ok.length) throw new Error('No categories left'); pickCategory(ok[Math.floor(Math.random() * ok.length)].id); break; }
       case 'setPerPick': if (!PERPICK.includes(a.n)) throw new Error('Bad number'); sett().perPick = a.n; ls.set('lq_settings', sett()); break;
       case 'lobby': clearTimers(); S.round = null; S.phase = 'lobby'; break;
@@ -634,6 +661,7 @@ function onPlayerMsg(d) {
     else if (d.type === 'leave') { if (p) p.pid = null; }
     else if (!p) throw new Error('Tap your name to join first');
     else if (d.type === 'mult') setMultiplier(p, parseInt(d.mult, 10));
+    else if (d.type === 'wager') setWager(p, d.amount);
     else if (d.type === 'answer') answer(p, d.choice, d.text);
     broadcast();
   } catch (e) { err(d.pid, e.message); }
@@ -718,7 +746,7 @@ function addName() { const i = $('#addname'); const n = i.value.trim(); if (!n) 
 function renderCategory() {
   showIn('.hv', 'hv-category');
   const one = HS.settings.perPick === 1;
-  $('#cat-title').textContent = (HS.qDone === 0 ? 'Pick a category' : `Q${HS.qDone + 1} of ${HS.config.multipliers.length} — pick a category`) + ' (or tap 🎲 Random)';
+  $('#cat-title').textContent = (HS.qDone === 0 ? 'Pick a category' : `Q${HS.mq + 1} of ${HS.config.multipliers.length} — pick a category`) + ' (or tap 🎲 Random)';
   $('#setup-cat').innerHTML = setupHtml();
   const lv = HS.settings.level, others = HS.categories.some(c => c.id !== HS.lastCat && c.remaining);
   $('#catgrid').innerHTML = HS.categories.map(c => { const last = one && c.id === HS.lastCat && others; const ok = c.remaining && !last;
@@ -728,15 +756,25 @@ function renderCategory() {
 function renderMultiplier() {
   showIn('.hv', 'hv-multiplier');
   const r = HS.round, c = HS.config;
+  $('#hv-multiplier').classList.toggle('gamble', !!r.gamble);
+  $('#mtitle').innerHTML = r.gamble ? '🎰 GAMBLE! How many points will you bet?' : '⚡ Pick your multiplier — quick!';
+  if (r.gamble) {
+    $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">${levelName(r.nextD)} question · bonus round</div></div>`;
+    $('#rules').innerHTML = `<div class="rulesline">Right = you win your bet (double it) · Wrong = you lose it · doesn't use a multiplier</div>`;
+    $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.wagered ? 'locked' : ''} ${p.pid ? '' : 'off'} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="col"><div class="nm">${crown(p)}${esc(p.name)}</div><div class="toks"><span class="pts">${p.score} pts</span></div></div><div class="mk">${p.wagered ? '🔒' : (p.pid ? '…' : '—')}</div></div>`).join('');
+    $('#mhint').innerHTML = 'Bets stay secret until the reveal · host taps <b>Ready for question</b>';
+    return;
+  }
+  $('#mhint').innerHTML = 'Greyed numbers are already used · host taps <b>Ready for question</b>';
   $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">${r.total > 1 ? `Question ${r.qIndex + 1} of ${r.total} · ` : ''}${levelName(r.nextD)} question coming up</div></div>`;
-  $('#rules').innerHTML = `<div class="rulesline">Correct = ${c.base} × your multiplier · each multiplier once · question ${HS.qDone + 1} of ${c.multipliers.length}</div>`;
+  $('#rules').innerHTML = `<div class="rulesline">Correct = ${c.base} × your multiplier · each multiplier once · question ${HS.mq + 1} of ${c.multipliers.length}</div>`;
   $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="col"><div class="nm">${crown(p)}${esc(p.name)}</div><div class="toks">${c.multipliers.map(m => `<i class="${p.used.includes(m) ? 'u' : ''}">${m}</i>`).join('')}</div></div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
 }
 function renderQuestionH() {
   showIn('.hv', 'hv-question');
   const r = HS.round, q = r.question, rv = HS.phase === 'reveal';
   $('#hv-question').classList.toggle('reveal', rv);
-  $('#hq-sub').innerHTML = `${r.icon} ${esc(r.catName)} · ${r.total > 1 ? `Q${r.qIndex + 1}/${r.total}` : `Q${HS.qDone + (rv ? 0 : 1)}`} <span class="dchip ${q.d}">${levelName(q.d)}</span>`;
+  $('#hq-sub').innerHTML = `${r.icon} ${esc(r.catName)} · ${r.total > 1 ? `Q${r.qIndex + 1}/${r.total}` : `Q${HS.qDone + (rv ? 0 : 1)}`} <span class="dchip ${q.d}">${levelName(q.d)}</span>${r.gamble ? ' <span class="dchip gam">🎰 GAMBLE</span>' : ''}`;
   const n = HS.players.filter(p => p.pid).length, a = HS.players.filter(p => p.pid && p.answered).length;
   $('#hq-ans').textContent = rv ? '' : `${a} / ${n} answered`;
   $('#qtext').textContent = q.text;
@@ -777,7 +815,7 @@ function renderStrip() {
     let cls = p.pid ? '' : 'off', extra = '';
     if (ph === 'question' && p.answered) cls += ' answered';
     if (ph === 'reveal' && p.pid) { cls += p.correct ? ' right' : ' wrong'; extra = `<span class="d ${p.delta > 0 ? 'up' : p.delta < 0 ? 'dn' : ''}">${p.delta > 0 ? '+' : ''}${p.delta}</span>`; }
-    const m = (ph === 'question' || ph === 'reveal' || ph === 'multiplier') && p.mult ? `<span class="m">×${p.mult}</span>` : '';
+    const m = HS.round && HS.round.gamble && (ph === 'question' || ph === 'reveal' || ph === 'multiplier') ? (p.wagered ? `<span class="m">🎰${ph === 'reveal' && p.wager != null ? ' ' + p.wager : ''}</span>` : '') : (ph === 'question' || ph === 'reveal' || ph === 'multiplier') && p.mult ? `<span class="m">×${p.mult}</span>` : '';
     return `<div class="pp ${cls} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${crown(p)}${esc(p.name)}</div>${m}${extra}<div class="sc">${p.score}</div></div>`;
   }).join('');
 }
@@ -785,9 +823,9 @@ function primary() {
   const ph = HS.phase;
   if (ph === 'lobby') return { label: 'Start game ▶', act: { type: 'start' }, cls: 'good big' };
   if (ph === 'category') return { label: '🎲 Random category ▶', act: { type: 'randomCat' }, cls: 'big' };
-  if (ph === 'multiplier') { const n = HS.players.filter(p => p.pid).length, k = HS.players.filter(p => p.pid && p.mult).length; return { label: `Ready for question ▶${n ? ` <small>${k}/${n} locked</small>` : ''}`, act: { type: 'go' }, cls: 'good big' }; }
+  if (ph === 'multiplier') { const n = HS.players.filter(p => p.pid).length, k = HS.players.filter(p => p.pid && (HS.round.gamble ? p.wagered : p.mult)).length; return { label: `Ready for question ▶${n ? ` <small>${k}/${n} locked</small>` : ''}`, act: { type: 'go' }, cls: 'good big' }; }
   if (ph === 'question') return { label: 'Reveal now', act: { type: 'reveal' }, cls: 'ghost' };
-  if (ph === 'reveal' && HS.qDone >= HS.config.multipliers.length) return { label: 'Final results 🏆', act: { type: 'next' }, cls: 'good big' };
+  if (ph === 'reveal' && HS.mq >= HS.config.multipliers.length) return { label: 'Final results 🏆', act: { type: 'next' }, cls: 'good big' };
   if (ph === 'reveal') { const end = HS.round.qIndex + 1 >= HS.round.total; return { label: !end ? 'Next question ▶' : HS.settings.perPick === 1 && HS.qDone % 5 !== 0 ? 'Next ▶' : 'Scoreboard ▶', act: { type: 'next' }, cls: 'big' }; }
   if (ph === 'scoreboard') return { label: 'Next ▶', act: { type: 'next' }, cls: 'good big' };
   return null;
@@ -796,7 +834,9 @@ let endArm = false, restartArm = false;
 function renderCtl() {
   const p = primary(), ph = HS.phase; let h = '';
   const me = HS.players.find(x => x.pid === 'host');
-  if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => me.used.includes(m) ? `<button class="btn mybtn usedm" disabled>×${m}</button>` : `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
+  if (ph === 'multiplier') h += `<button class="btn ${HS.round.gamble ? 'gambleon' : 'ghost'}" onclick="hostAct({type:'gamble'})">${HS.round.gamble ? '🎰 Gamble ON' : '🎰 Gamble'}</button>`;
+  if (me && ph === 'multiplier' && HS.round.gamble) h += `<span class="mine">👑 Bet:</span>` + (me.wagered ? `<span class="mine ok">locked 🔒</span>` : [[0, '0'], [Math.round(me.maxWager / 4), '¼'], [Math.round(me.maxWager / 2), '½'], [me.maxWager, 'All in']].map(([v, l]) => `<button class="btn mybtn" onclick="hostAct({type:'hostWager',amount:${v}})">${l}</button>`).join('')) + `<span class="sep"></span>`;
+  else if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => me.used.includes(m) ? `<button class="btn mybtn usedm" disabled>×${m}</button>` : `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
   if (me && ph === 'question' && HS.round.typed) h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : `<input id="hosttype" class="hostty" placeholder="type answer" maxlength="40" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')hostType()"><button class="btn mybtn" onclick="hostType()">Lock</button>`) + `<span class="sep"></span>`;
   else if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
   const playing = me && (ph === 'multiplier' || ph === 'question');
@@ -886,7 +926,7 @@ function renderPlayer() {
   const ph = PS.phase;
   if (ph === 'lobby') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎉'; $('#w-t').textContent = "You're in!"; $('#w-s').textContent = 'Watch the TV — the host will start soon'; }
   else if (ph === 'category') { showIn('.view', 'v-wait'); $('#w-ic').textContent = '🎲'; $('#w-t').textContent = 'Picking a category…'; $('#w-s').textContent = 'Shout your preference at the host'; }
-  else if (ph === 'multiplier') { const k = PS.roundNo + ':' + PS.round.qIndex; if (lastQ !== k) { picked = null; chosen = null; typedMine = ''; lastQ = k; $('#opts').innerHTML = ''; } showIn('.view', 'v-multiplier'); renderMult(); }
+  else if (ph === 'multiplier') { const k = PS.roundNo + ':' + PS.round.qIndex + ':' + (PS.round.gamble ? 'g' : 'm'); if (lastQ !== k) { picked = null; chosen = null; typedMine = ''; betDraft = null; lastQ = k; $('#opts').innerHTML = ''; } showIn('.view', 'v-multiplier'); renderMult(); }
   else if (ph === 'question') { showIn('.view', 'v-question'); renderQuestionP(); }
   else if (ph === 'reveal') { showIn('.view', 'v-reveal'); renderReveal(); }
   else if (ph === 'scoreboard' || ph === 'final') { showIn('.view', 'v-score'); renderScore(ph === 'final'); }
@@ -899,6 +939,8 @@ function renderLogin() {
   document.querySelector('#v-login .or').style.display = PS.players.length >= CONFIG.maxPlayers ? 'none' : '';
 }
 function renderMult() {
+  if (PS.round.gamble) return renderWager();
+  $('#v-multiplier').classList.remove('gamble'); $('#mtitleP').textContent = 'How confident are you?';
   const c = PS.config, p = mine(), locked = p && p.mult != null ? p.mult : picked;
   $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName}${PS.round.total > 1 ? ` · Q${PS.round.qIndex + 1} of ${PS.round.total}` : ''} · ${levelName(PS.round.nextD).toUpperCase()} question next`;
   const used = p ? p.used : [], hue = (m) => `hsl(${220 - (m - 1) * (220 / Math.max(1, c.multipliers.length - 1))} 75% 48%)`;
@@ -909,6 +951,24 @@ function renderMult() {
   const n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.mult != null).length;
   $('#m-status').textContent = locked != null ? `Locked ×${locked} ✓ · ${k}/${n} ready · question coming` : `Quick! ${c.multipliers.length - used.length} left — each one only once`;
 }
+let betDraft = null;
+function renderWager() {
+  const p = mine(); if (!p) return;
+  $('#v-multiplier').classList.add('gamble'); $('#mtitleP').textContent = '🎰 GAMBLE! Bet your points';
+  $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName} · ${levelName(PS.round.nextD).toUpperCase()} question · right doubles your bet, wrong loses it`;
+  const max = p.maxWager, n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.wagered).length;
+  $('#mults').classList.remove('ten');
+  if (p.wagered || picked != null) { $('#mults').innerHTML = `<div class="betdone"><div class="big">🔒</div><div>Bet locked: <b>${picked ?? '✓'}</b> pts</div></div>`; $('#m-status').textContent = `${k}/${n} bets in · question coming`; return; }
+  if (betDraft == null) betDraft = Math.round(max / 2);
+  const chip = (v, l) => `<button class="bchip ${betDraft === v ? 'on' : ''}" onclick="betDraft=${v};renderWager()">${l}<small>${v}</small></button>`;
+  $('#mults').innerHTML = `<div class="bet"><div class="betnum">${betDraft}<small>pts</small></div>
+    <input type="range" min="0" max="${max}" step="${max > 400 ? 50 : 10}" value="${betDraft}" oninput="betDraft=+this.value;document.querySelector('.betnum').firstChild.nodeValue=this.value">
+    <div class="bchips">${chip(0, 'Nothing')}${chip(Math.round(max / 4), '¼')}${chip(Math.round(max / 2), '½')}${chip(max, 'All in')}</div>
+    <div class="bwin">Right: <b>+${betDraft}</b> · Wrong: <b>−${betDraft}</b></div>
+    <button class="btn good" onclick="lockBet()">Lock bet 🎰</button></div>`;
+  $('#m-status').textContent = `You have ${p.score} pts · max bet ${max}${p.score < 100 ? ' (everyone can bet up to 100)' : ''}`;
+}
+function lockBet() { if (picked != null || betDraft == null) return; picked = betDraft; send({ type: 'wager', amount: betDraft }); renderWager(); if (navigator.vibrate) navigator.vibrate(40); }
 function renderQuestionP() {
   const q = PS.round.question, p = mine(), ans = p && p.answered ? (chosen ?? -1) : chosen;
   const media = q.svg ? `<div class="media">${q.svg}</div>` : q.image ? `<div class="media"><img src="${q.image}" alt=""></div>` : '';
@@ -923,7 +983,8 @@ function renderQuestionP() {
     if ($('#tyin') && !$('#tyin')._f) { $('#tyin')._f = 1; setTimeout(() => { try { $('#tyin').focus(); } catch {} }, 50); }
   } else
   $('#opts').innerHTML = q.options.map((o, i) => `<button class="ob ${ans === i ? 'sel' : ans != null ? 'dim' : ''}" style="--c:${LC[i]}" onclick="pickAnswer(${i})"><div class="l">${LETTERS[i]}</div><div class="n">${esc(o)}</div></button>`).join('');
-  if (!PS.round.typed) $('#q-status').textContent = ans != null ? `Locked in ${LETTERS[ans] || ''} ✓  (×${p.mult})` : `×${p ? p.mult : 1} — tap your answer`;
+  const tag = PS.round.gamble ? `🎰 ${picked != null ? picked : 0} on the line` : `×${p ? p.mult : 1}`;
+  if (!PS.round.typed) $('#q-status').textContent = ans != null ? `Locked in ${LETTERS[ans] || ''} ✓  (${tag})` : `${tag} — tap your answer`;
   cancelAnimationFrame(praf);
   const total = (PS.round.secs || PS.config.questionSeconds) * 1000;
   const tick = () => { if (!PS.round || PS.phase !== 'question') return; const left = Math.max(0, PS.round.deadline - (now() + offset)); $('#tbar').style.transform = `scaleX(${left / total})`; if (left > 0) praf = requestAnimationFrame(tick); };
@@ -932,6 +993,7 @@ function renderQuestionP() {
 function renderReveal() {
   const p = mine(), q = PS.round.question, r = $('#result');
   if (p.answer == null) { r.className = 'result na'; r.innerHTML = `<div class="d">⏱️</div><h1>Too slow</h1><div class="m">No answer, no points</div>`; }
+  else if (PS.round.gamble) { r.className = 'result ' + (p.correct ? 'ok' : 'no'); r.innerHTML = `<div class="d">${p.delta >= 0 ? '+' : '−'}${Math.abs(p.delta)}</div><h1>${p.correct ? 'Gamble paid off! 🎰' : 'Gamble lost 😬'}</h1><div class="m">You bet ${p.wager || 0}</div>`; }
   else if (p.correct) { r.className = 'result ok'; r.innerHTML = `<div class="d">+${p.delta}</div><h1>Correct! 🎉</h1><div class="m">${p.typed != null ? '“' + esc(p.typed) + '” · ' : ''}×${p.mult}${p.delta > PS.config.base * p.mult ? ' + ' + (p.delta - PS.config.base * p.mult) + ' speed bonus' : ''}</div>`; if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
   else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬</h1><div class="m">${p.typed != null ? 'You typed “' + esc(p.typed) + '”' : 'You picked ' + LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
   $('#r-correct').textContent = PS.round.typed ? `Answer: ${q.options[q.correct]}` : `Answer: ${LETTERS[q.correct]} — ${q.options[q.correct]}`;
