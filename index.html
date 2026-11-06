@@ -126,6 +126,10 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 /* multiplier */
 .mult{flex-direction:column;gap:2vh;align-items:center;justify-content:center}
 .mult h1{font-size:4.6vh;text-align:center}.mult h2{font-size:2.2vh;text-align:center}
+.preview{display:flex;align-items:center;gap:2vh;background:linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 55%,#000));border-radius:2.4vh;padding:1.6vh 3vh;box-shadow:0 1vh 3vh rgba(0,0,0,.45);color:#fff;max-width:90%}
+.preview .ic{font-size:7vh;line-height:1;filter:drop-shadow(0 .5vh 1vh rgba(0,0,0,.4))}
+.preview .nm{font-size:4.2vh;font-weight:900;text-shadow:0 .3vh 1vh rgba(0,0,0,.4);line-height:1}
+.preview .meta{font-size:2.2vh;font-weight:800;opacity:.95;margin-top:.6vh}
 .rules{display:flex;gap:1.4vh;flex-wrap:wrap;justify-content:center}
 .rule{background:var(--card);border:1px solid var(--line);border-radius:2vh;padding:1.6vh 2.6vh;text-align:center;min-width:16vh}
 .rule .x{font-size:4.4vh;font-weight:900}.rule .w{color:var(--good);font-size:2.1vh}.rule .l{color:var(--bad);font-size:1.9vh}
@@ -259,8 +263,8 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
   <div class="view" id="v-wait"><div class="center"><div class="big" id="w-ic">🎉</div><h1 id="w-t">You're in!</h1><h2 id="w-s">Watch the TV — the host will start soon</h2></div></div>
 
   <div class="view" id="v-multiplier">
-    <h1>How confident are you?</h1>
     <h2 id="m-sub"></h2>
+    <h1>How confident are you?</h1>
     <div class="mults" id="mults"></div>
     <h2 id="m-status" style="text-align:center"></h2>
   </div>
@@ -297,7 +301,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
       <div class="slots" id="slots"></div>
     </div>
     <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="catgrid" id="catgrid"></div></div>
-    <div class="hv mult" id="hv-multiplier"><h2 id="hm-sub"></h2><h1>Lock in your multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div></div>
+    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>How confident are you? Lock in a multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2>The question appears once everyone has locked in</h2></div>
     <div class="hv q" id="hv-question">
       <div class="timer h"><i id="htbar"></i></div>
       <div class="qhead"><span id="hq-sub"></span><span id="hq-ans"></span><span class="t" id="hq-t"></span></div>
@@ -573,7 +577,7 @@ function renderCategory() {
 function renderMultiplier() {
   showIn('.hv', 'hv-multiplier');
   const r = HS.round, c = HS.config;
-  $('#hm-sub').innerHTML = `${r.icon} ${esc(r.catName)} · Question ${r.qIndex + 1} of ${r.total} <span class="dchip ${r.nextD}">${r.nextD === 'easy' ? 'Easy' : 'Medium'}</span>`;
+  $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">Question ${r.qIndex + 1} of ${r.total} · ${r.nextD === 'easy' ? 'Easy' : 'Medium'} question coming up</div></div>`;
   $('#rules').innerHTML = c.multipliers.map(m => `<div class="rule x${m}"><div class="x">×${m}</div><div class="w">+${c.base * m}${m === 1 ? ' (+speed)' : ''}</div><div class="l">${m === 1 ? 'no penalty' : '−' + c.wrongPenaltyPerStep * (m - 1) + ' if wrong'}</div></div>`).join('');
   $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${esc(p.name)}</div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
 }
@@ -725,7 +729,7 @@ function renderLogin() {
 }
 function renderMult() {
   const c = PS.config, p = mine(), locked = p && p.mult != null ? p.mult : picked;
-  $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName} · Question ${PS.round.qIndex + 1} of ${PS.round.total} · ${PS.round.nextD === 'easy' ? 'easy one' : 'medium'}`;
+  $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName} · Q${PS.round.qIndex + 1} of ${PS.round.total} · ${PS.round.nextD === 'easy' ? 'EASY' : 'MEDIUM'} question next`;
   const col = { 1: '#4b5578', 2: '#e0a000', 3: '#d81b98' };
   $('#mults').innerHTML = c.multipliers.map(m => `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${col[m] || '#3a86ff'}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m} if right${m === 1 ? ' (+ speed bonus)' : ''}</div><div class="l">${m === 1 ? 'no penalty' : '−' + c.wrongPenaltyPerStep * (m - 1) + ' if wrong'}</div></button>`).join('');
   const n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.mult != null).length;
