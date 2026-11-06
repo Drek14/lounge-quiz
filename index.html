@@ -203,6 +203,15 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .pp.right{background:rgba(46,229,157,.18);border-color:var(--good)}.pp.wrong{background:rgba(255,77,109,.18);border-color:var(--bad)}
 .pp .d{font-size:1.7vh;font-weight:900}.pp .d.up{color:var(--good)}.pp .d.dn{color:var(--bad)}
 .ctl{display:flex;gap:.8vh;align-items:center;flex:none}
+.ctl .mine{font-size:2vh;color:var(--accent);font-weight:900;white-space:nowrap}.ctl .mine.ok{color:var(--good)}
+.ctl .sep{width:1px;align-self:stretch;background:var(--line);margin:0 .4vh}
+.ctl .btn.mybtn{padding:1.2vh 1.8vh;min-width:6vh;font-weight:900;border:2px solid var(--accent)}
+.chip.me{color:#111;background:var(--accent);border-color:var(--accent);font-weight:900}.chip.me.dim{background:var(--card);color:var(--muted);border-color:var(--line)}
+.slot.me{border:2px solid var(--accent);box-shadow:0 0 2vh rgba(255,190,11,.25)}
+.youtag{background:var(--accent);color:#111;border-radius:.5em;padding:0 .4em;margin-right:.4em;font-size:.8em}
+.mebtn{margin-left:auto;background:var(--accent);color:#111;border:0;border-radius:1vh;padding:.6vh 1.2vh;font:inherit;font-size:1.7vh;font-weight:900;flex:none}
+.slot .mebtn + .x{margin-left:.6vh}
+.pp.me,.pcard.me{border:2px solid var(--accent)}
 .ctl .btn{width:auto;font-size:2vh;padding:1.2vh 2vh;border-radius:1.4vh;white-space:nowrap}
 /* photo builder */
 .sheet{position:fixed;inset:0;background:rgba(5,8,20,.92);z-index:20;display:none;flex-direction:column;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overflow:auto}
@@ -287,7 +296,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 <div class="screen" id="s-host" style="gap:1.2vh;padding-block:1vh">
   <div class="top">
     <div class="logo2">Lounge <b>Quiz</b></div>
-    <div class="row" style="gap:.8vh"><div class="chip code" id="codechip"></div><div id="topchip" class="chip" style="display:none"></div></div>
+    <div class="row" style="gap:.8vh"><div class="chip code" id="codechip"></div><div id="mechip" class="chip me"></div><div id="topchip" class="chip" style="display:none"></div></div>
   </div>
   <div class="stage">
     <div class="hv lobby" id="hv-lobby">
@@ -343,7 +352,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&l
 const LETTERS = ['A','B','C','D'], LC = ['var(--A)','var(--B)','var(--C)','var(--D)'];
 const AVATARS = ['🦘','🐨','🦈','🐙','🦊','🐸','🦁','🐼','🦄','🐲','🐵','🦅','🐯','🦖','🐳','🐧'];
 const COLORS = ['#ff595e','#ffca3a','#8ac926','#1982c4','#6a4c93','#ff924c','#52ffb8','#ff5dd6'];
-const CONFIG = { maxPlayers: 8, questionsPerRound: 5, easyPerRound: 2, questionSeconds: 20, multiplierPer: 'question', base: 100, speedBonus: 50, wrongPenaltyPerStep: 100, multipliers: [1, 2, 3] };
+const CONFIG = { maxPlayers: 8, questionsPerRound: 5, easyPerRound: 2, questionSeconds: 20, multiplierPer: 'question', base: 100, speedBonus: 50, wrongPenaltyPerStep: 0, multipliers: [1, 2, 3] };
 const BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt', 'wss://test.mosquitto.org:8081'];
 const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }, del(k) { try { localStorage.removeItem(k); } catch {} } };
 const rid = (n = 8) => Array.from(crypto.getRandomValues(new Uint8Array(n))).map(b => 'abcdefghijklmnopqrstuvwxyz0123456789'[b % 36]).join('');
@@ -414,7 +423,7 @@ function addPlayer(name, avatar) {
 }
 function claimPlayer(id, pid, avatar) {
   const p = S.players.find(x => x.id === id); if (!p) throw new Error('Player not found');
-  if (p.pid && p.pid !== pid) throw new Error(p.name + ' is already taken on another phone');
+  if (p.pid && p.pid !== pid) throw new Error(p.pid === 'host' ? p.name + ' is the host — pick another name' : p.name + ' is already taken on another phone');
   S.players.forEach(x => { if (x.pid === pid && x !== p) x.pid = null; });
   p.pid = pid; if (avatar) p.avatar = avatar;
 }
@@ -485,6 +494,10 @@ function hostAct(a) {
     switch (a.type) {
       case 'addPlayer': addPlayer(a.name); break;
       case 'removePlayer': S.players = S.players.filter(p => p.id !== a.id); break;
+      case 'hostMe': claimPlayer(a.id, 'host'); break;
+      case 'hostNotMe': S.players.forEach(p => { if (p.pid === 'host') p.pid = null; }); break;
+      case 'hostMult': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); setMultiplier(me, a.mult); break; }
+      case 'hostAnswer': { const me = S.players.find(p => p.pid === 'host'); if (!me) throw new Error('Tap 👑 Me on your name in the lobby first'); answer(me, a.choice); break; }
       case 'start': startGame(); break;
       case 'category': pickCategory(a.cat); break;
       case 'go': startQuestion(); break;
@@ -500,6 +513,7 @@ function hostAct(a) {
   } catch (e) { toast(e.message); }
 }
 function onPlayerMsg(d) {
+  if (d.pid === 'host') return;
   const p = S.players.find(x => x.pid === d.pid);
   try {
     if (d.type === 'join') { const np = addPlayer(d.name, d.avatar); claimPlayer(np.id, d.pid, d.avatar); }
@@ -544,6 +558,9 @@ let HS = null, raf = null;
 function renderHost() {
   const ph = HS.phase;
   $('#codechip').textContent = HS.code;
+  const meP = HS.players.find(p => p.pid === 'host');
+  $('#mechip').innerHTML = meP ? `👑 You: ${meP.avatar} ${esc(meP.name)}` : (ph === 'lobby' ? '👑 Playing? Tap “Me” on your name' : '👑 Host only');
+  $('#mechip').classList.toggle('dim', !meP);
   const chip = $('#topchip');
   if (HS.round) { chip.style.display = ''; chip.style.setProperty('--c', HS.round.color); chip.innerHTML = `<span class="dot"></span>${HS.round.icon} ${esc(HS.round.catName)} · R${HS.roundNo}`; }
   else if (ph !== 'lobby') { chip.style.display = ''; chip.innerHTML = `Round ${HS.roundNo + 1}`; } else chip.style.display = 'none';
@@ -560,10 +577,11 @@ function renderLobby() {
   let h = '';
   for (let i = 0; i < CONFIG.maxPlayers; i++) {
     const p = HS.players[i];
-    if (p) h += `<div class="slot ${p.pid ? 'ok' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div style="min-width:0"><div class="nm">${esc(p.name)}</div><div class="st">${p.pid ? '✓ phone connected' : 'waiting for their phone…'}</div></div><button class="x" onclick="hostAct({type:'removePlayer',id:'${p.id}'})">✕</button></div>`;
+    const isMe = p && p.pid === 'host', hasMe = HS.players.some(x => x.pid === 'host');
+    if (p) h += `<div class="slot ${p.pid ? 'ok' : ''} ${isMe ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div style="min-width:0"><div class="nm">${isMe ? '<span class="youtag">👑 YOU</span>' : ''}${esc(p.name)}</div><div class="st">${isMe ? 'host · plays on this screen' : p.pid ? '✓ phone connected' : 'waiting for their phone…'}</div></div>${isMe ? `<button class="mebtn" onclick="hostAct({type:'hostNotMe'})">not me</button>` : (!p.pid && !hasMe ? `<button class="mebtn" onclick="hostAct({type:'hostMe',id:'${p.id}'})">👑 Me</button>` : '')}<button class="x" onclick="hostAct({type:'removePlayer',id:'${p.id}'})">✕</button></div>`;
     else h += `<div class="slot empty" onclick="$('#addname').focus()">+ add player</div>`;
   }
-  h += `<div class="addrow"><input id="addname" placeholder="Add a name (or they add themselves)" maxlength="16"><button class="btn ghost sm" onclick="addName()">Add</button></div>`;
+  h += `<div class="addrow"><input id="addname" placeholder="Add a name (add yourself, then tap 👑 Me)" maxlength="16"><button class="btn ghost sm" onclick="addName()">Add</button></div>`;
   const keep = $('#addname') ? $('#addname').value : '';
   $('#slots').innerHTML = h; $('#addname').value = keep;
   $('#addname').onkeydown = (e) => { if (e.key === 'Enter') addName(); };
@@ -578,8 +596,8 @@ function renderMultiplier() {
   showIn('.hv', 'hv-multiplier');
   const r = HS.round, c = HS.config;
   $('#preview').style.setProperty('--c', r.color); $('#preview').innerHTML = `<div class="ic">${r.icon}</div><div><div class="nm">${esc(r.catName)}</div><div class="meta">Question ${r.qIndex + 1} of ${r.total} · ${r.nextD === 'easy' ? 'Easy' : 'Medium'} question coming up</div></div>`;
-  $('#rules').innerHTML = c.multipliers.map(m => `<div class="rule x${m}"><div class="x">×${m}</div><div class="w">+${c.base * m}${m === 1 ? ' (+speed)' : ''}</div><div class="l">${m === 1 ? 'no penalty' : '−' + c.wrongPenaltyPerStep * (m - 1) + ' if wrong'}</div></div>`).join('');
-  $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${esc(p.name)}</div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
+  $('#rules').innerHTML = c.multipliers.map(m => `<div class="rule x${m}"><div class="x">×${m}</div><div class="w">+${c.base * m}${m === 1 ? ' (+speed)' : ''}</div><div class="l">nothing lost if wrong</div></div>`).join('');
+  $('#mgrid').innerHTML = HS.players.map(p => `<div class="pcard ${p.mult ? 'locked' : ''} ${p.pid ? '' : 'off'} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${crown(p)}${esc(p.name)}</div><div class="mk">${p.mult ? '×' + p.mult : (p.pid ? '…' : '—')}</div></div>`).join('');
 }
 function renderQuestionH() {
   showIn('.hv', 'hv-question');
@@ -596,12 +614,13 @@ function renderQuestionH() {
   if (!rv) { const total = CONFIG.questionSeconds * 1000; const tick = () => { const left = Math.max(0, r.deadline - now()); $('#htbar').style.transform = `scaleX(${left / total})`; $('#hq-t').textContent = Math.ceil(left / 1000); if (left > 0 && HS.phase === 'question') raf = requestAnimationFrame(tick); }; tick(); }
   else { $('#htbar').style.transform = 'scaleX(0)'; $('#hq-t').textContent = ''; }
 }
+const crown = (p) => p.pid === 'host' ? '👑 ' : '';
 const ranked = (ps) => [...ps].sort((a, b) => b.score - a.score);
 function renderScoreboard() {
   showIn('.hv', 'hv-scoreboard');
   const rs = ranked(HS.players), max = Math.max(1, ...rs.map(p => Math.abs(p.score)));
   $('#sb-title').textContent = `Scoreboard after Round ${HS.roundNo}`;
-  $('#rows').innerHTML = rs.map((p, i) => `<div class="srow" style="--c:${p.color};animation-delay:${i * .08}s"><div class="rk">${i + 1}</div><div class="av">${p.avatar}</div><div class="bar"><i style="width:${Math.max(4, Math.max(0, p.score) / max * 100)}%"></i><b>${esc(p.name)}</b></div><div class="sc">${p.score}</div></div>`).join('');
+  $('#rows').innerHTML = rs.map((p, i) => `<div class="srow" style="--c:${p.color};animation-delay:${i * .08}s"><div class="rk">${i + 1}</div><div class="av">${p.avatar}</div><div class="bar"><i style="width:${Math.max(4, Math.max(0, p.score) / max * 100)}%"></i><b>${crown(p)}${esc(p.name)}</b></div><div class="sc">${p.score}</div></div>`).join('');
 }
 function renderFinal() {
   showIn('.hv', 'hv-final');
@@ -619,7 +638,7 @@ function renderStrip() {
     if (ph === 'question' && p.answered) cls += ' answered';
     if (ph === 'reveal' && p.pid) { cls += p.correct ? ' right' : ' wrong'; extra = `<span class="d ${p.delta > 0 ? 'up' : p.delta < 0 ? 'dn' : ''}">${p.delta > 0 ? '+' : ''}${p.delta}</span>`; }
     const m = (ph === 'question' || ph === 'reveal' || ph === 'multiplier') && p.mult ? `<span class="m">×${p.mult}</span>` : '';
-    return `<div class="pp ${cls}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${esc(p.name)}</div>${m}${extra}<div class="sc">${p.score}</div></div>`;
+    return `<div class="pp ${cls} ${p.pid === 'host' ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div class="nm">${crown(p)}${esc(p.name)}</div>${m}${extra}<div class="sc">${p.score}</div></div>`;
   }).join('');
 }
 function primary() {
@@ -634,10 +653,14 @@ function primary() {
 let endArm = false, restartArm = false;
 function renderCtl() {
   const p = primary(), ph = HS.phase; let h = '';
+  const me = HS.players.find(x => x.pid === 'host');
+  if (me && ph === 'multiplier') h += `<span class="mine">👑 You:</span>` + (me.mult ? `<span class="mine ok">×${me.mult} locked ✓</span>` : HS.config.multipliers.map(m => `<button class="btn mybtn" onclick="hostAct({type:'hostMult',mult:${m}})">×${m}</button>`).join('')) + `<span class="sep"></span>`;
+  if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
+  const playing = me && (ph === 'multiplier' || ph === 'question');
   if (ph === 'lobby') h += `<button class="btn ghost" onclick="shareLink()">💬 Text link</button><button class="btn ghost" onclick="openSheet()">📸 Photos</button>`;
   else h += `<button class="btn ghost" onclick="hostAct({type:'lobby'})" title="Back to the lobby, keeps players and scores">Lobby</button>`;
-  h += `<button class="btn ${restartArm ? 'bad' : 'ghost'}" onclick="restartGame()">${restartArm ? 'Tap again: restart' : '↻ Restart'}</button>`;
-  if (ph !== 'lobby' && ph !== 'final' && ph !== 'category') h += `<button class="btn ghost" onclick="hostAct({type:'skipRound'})">Skip round</button>`;
+  if (!playing) h += `<button class="btn ${restartArm ? 'bad' : 'ghost'}" onclick="restartGame()">${restartArm ? 'Tap again: restart' : '↻ Restart'}</button>`;
+  if (!playing && ph !== 'lobby' && ph !== 'final' && ph !== 'category') h += `<button class="btn ghost" onclick="hostAct({type:'skipRound'})">Skip round</button>`;
   if (ph === 'scoreboard' || ph === 'category') h += `<button class="btn ${endArm ? 'bad' : 'ghost'}" onclick="endGame()">${endArm ? 'Tap again to end' : 'End game'}</button>`;
   if (ph === 'final') h += `<button class="btn good" onclick="hostAct({type:'resetScores'})">Play again (new questions)</button>`;
   if (p) h += `<button class="btn ${p.cls || ''}" onclick='hostAct(${JSON.stringify(p.act)})'>${p.label}</button>`;
@@ -731,7 +754,7 @@ function renderMult() {
   const c = PS.config, p = mine(), locked = p && p.mult != null ? p.mult : picked;
   $('#m-sub').textContent = `${PS.round.icon} ${PS.round.catName} · Q${PS.round.qIndex + 1} of ${PS.round.total} · ${PS.round.nextD === 'easy' ? 'EASY' : 'MEDIUM'} question next`;
   const col = { 1: '#4b5578', 2: '#e0a000', 3: '#d81b98' };
-  $('#mults').innerHTML = c.multipliers.map(m => `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${col[m] || '#3a86ff'}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m} if right${m === 1 ? ' (+ speed bonus)' : ''}</div><div class="l">${m === 1 ? 'no penalty' : '−' + c.wrongPenaltyPerStep * (m - 1) + ' if wrong'}</div></button>`).join('');
+  $('#mults').innerHTML = c.multipliers.map(m => `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${col[m] || '#3a86ff'}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m} if right${m === 1 ? ' (+ speed bonus)' : ''}</div><div class="l">nothing lost if wrong</div></button>`).join('');
   const n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.mult != null).length;
   $('#m-status').textContent = locked != null ? `Locked ×${locked} · ${k}/${n} ready` : 'Pick one — the question comes next';
 }
@@ -750,7 +773,7 @@ function renderReveal() {
   const p = mine(), q = PS.round.question, r = $('#result');
   if (p.answer == null) { r.className = 'result na'; r.innerHTML = `<div class="d">⏱️</div><h1>Too slow</h1><div class="m">No answer, no points</div>`; }
   else if (p.correct) { r.className = 'result ok'; r.innerHTML = `<div class="d">+${p.delta}</div><h1>Correct! 🎉</h1><div class="m">×${p.mult}${p.delta > PS.config.base * p.mult ? ' + ' + (p.delta - PS.config.base * p.mult) + ' speed bonus' : ''}</div>`; if (navigator.vibrate) navigator.vibrate([40, 40, 40]); }
-  else { r.className = 'result no'; r.innerHTML = `<div class="d">${p.delta}</div><h1>Wrong 😬</h1><div class="m">You picked ${LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
+  else { r.className = 'result no'; r.innerHTML = `<div class="d">+0</div><h1>Wrong 😬 — no points lost</h1><div class="m">You picked ${LETTERS[p.answer]} on ×${p.mult}</div>`; if (navigator.vibrate) navigator.vibrate(200); }
   $('#r-correct').textContent = `Answer: ${LETTERS[q.correct]} — ${q.options[q.correct]}`;
 }
 function renderScore(final) {
