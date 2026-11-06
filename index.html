@@ -253,6 +253,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .mebtn{margin-left:auto;background:var(--accent);color:#111;border:0;border-radius:1vh;padding:.6vh 1.2vh;font:inherit;font-size:1.7vh;font-weight:900;flex:none}
 .slot .mebtn + .x{margin-left:.6vh}
 .pp.me,.pcard.me{border:2px solid var(--accent)}
+.ctl .btn.big{font-size:2.6vh;padding:1.5vh 3vh;box-shadow:0 .6vh 0 rgba(0,0,0,.35),0 0 3vh rgba(46,229,157,.25)}.ctl .btn.big small{font-size:.65em;opacity:.75;margin-left:.6em}
 .ctl .btn{width:auto;font-size:2vh;padding:1.2vh 2vh;border-radius:1.4vh;white-space:nowrap}
 /* photo builder */
 .sheet{position:fixed;inset:0;background:rgba(5,8,20,.92);z-index:20;display:none;flex-direction:column;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));overflow:auto}
@@ -358,7 +359,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
       </div>
     </div>
     <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="setup small" id="setup-cat"></div><div class="catgrid" id="catgrid"></div></div>
-    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>How confident are you? Lock in a multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2>Greyed numbers are already used · the question appears once everyone has locked in</h2></div>
+    <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>⚡ Pick your multiplier — quick!</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2 id="mhint">Greyed numbers are already used · host taps <b>Ready for question</b></h2></div>
     <div class="hv q" id="hv-question">
       <div class="timer h"><i id="htbar"></i></div>
       <div class="qhead"><span id="hq-sub"></span><span id="hq-ans"></span><span class="t" id="hq-t"></span></div>
@@ -538,7 +539,7 @@ function setMultiplier(p, m) {
   if (!multList(gameLen()).includes(m)) throw new Error('Bad multiplier');
   if ((p.used || []).includes(m)) throw new Error('You already used ×' + m);
   p.mult = m;
-  if (claimed().length && claimed().every(x => x.mult != null)) { clearTimeout(autoTimer); autoTimer = setTimeout(() => { autoTimer = null; if (S.phase === 'multiplier') { startQuestion(); broadcast(); } }, 2000); }
+
 }
 function startQuestion() {
   if (S.phase !== 'multiplier') throw new Error('Pick a category first');
@@ -616,6 +617,7 @@ function hostAct(a) {
       case 'setLen': if (!LENGTHS.includes(a.n)) throw new Error('Bad length'); if (S.qDone) throw new Error('Change game length before the first question'); sett().len = a.n; ls.set('lq_settings', sett()); break;
       case 'setMode': if (!['choice', 'typed'].includes(a.mode)) throw new Error('Bad mode'); sett().mode = a.mode; ls.set('lq_settings', sett()); break;
       case 'flip': flipTyped(a.id); break;
+      case 'randomCat': { const ok = CATEGORIES.filter(c => c.id !== 'photo' && remainingIn(c.id) && !(sett().perPick === 1 && c.id === S.lastCat)); if (!ok.length) throw new Error('No categories left'); pickCategory(ok[Math.floor(Math.random() * ok.length)].id); break; }
       case 'setPerPick': if (!PERPICK.includes(a.n)) throw new Error('Bad number'); sett().perPick = a.n; ls.set('lq_settings', sett()); break;
       case 'lobby': clearTimers(); S.round = null; S.phase = 'lobby'; break;
       case 'reset': clearTimers(); freshState(S.code); qrDone = false; break;
@@ -716,7 +718,7 @@ function addName() { const i = $('#addname'); const n = i.value.trim(); if (!n) 
 function renderCategory() {
   showIn('.hv', 'hv-category');
   const one = HS.settings.perPick === 1;
-  $('#cat-title').textContent = HS.qDone === 0 ? 'Pick a category to start' : `Question ${HS.qDone + 1} of ${HS.config.multipliers.length} — pick ${one ? 'the next' : 'a'} category`;
+  $('#cat-title').textContent = (HS.qDone === 0 ? 'Pick a category' : `Q${HS.qDone + 1} of ${HS.config.multipliers.length} — pick a category`) + ' (or tap 🎲 Random)';
   $('#setup-cat').innerHTML = setupHtml();
   const lv = HS.settings.level, others = HS.categories.some(c => c.id !== HS.lastCat && c.remaining);
   $('#catgrid').innerHTML = HS.categories.map(c => { const last = one && c.id === HS.lastCat && others; const ok = c.remaining && !last;
@@ -781,12 +783,13 @@ function renderStrip() {
 }
 function primary() {
   const ph = HS.phase;
-  if (ph === 'lobby') return { label: 'Start game ▶', act: { type: 'start' }, cls: 'good' };
-  if (ph === 'multiplier') return { label: 'Go ▶', act: { type: 'go' } };
+  if (ph === 'lobby') return { label: 'Start game ▶', act: { type: 'start' }, cls: 'good big' };
+  if (ph === 'category') return { label: '🎲 Random category ▶', act: { type: 'randomCat' }, cls: 'big' };
+  if (ph === 'multiplier') { const n = HS.players.filter(p => p.pid).length, k = HS.players.filter(p => p.pid && p.mult).length; return { label: `Ready for question ▶${n ? ` <small>${k}/${n} locked</small>` : ''}`, act: { type: 'go' }, cls: 'good big' }; }
   if (ph === 'question') return { label: 'Reveal now', act: { type: 'reveal' }, cls: 'ghost' };
-  if (ph === 'reveal' && HS.qDone >= HS.config.multipliers.length) return { label: 'Final results 🏆', act: { type: 'next' }, cls: 'good' };
-  if (ph === 'reveal') { const end = HS.round.qIndex + 1 >= HS.round.total; return { label: !end ? 'Next ▶' : HS.settings.perPick === 1 && HS.qDone % 5 !== 0 ? 'Next category ▶' : 'Scoreboard ▶', act: { type: 'next' } }; }
-  if (ph === 'scoreboard') return { label: 'Next category ▶', act: { type: 'next' }, cls: 'good' };
+  if (ph === 'reveal' && HS.qDone >= HS.config.multipliers.length) return { label: 'Final results 🏆', act: { type: 'next' }, cls: 'good big' };
+  if (ph === 'reveal') { const end = HS.round.qIndex + 1 >= HS.round.total; return { label: !end ? 'Next question ▶' : HS.settings.perPick === 1 && HS.qDone % 5 !== 0 ? 'Next ▶' : 'Scoreboard ▶', act: { type: 'next' }, cls: 'big' }; }
+  if (ph === 'scoreboard') return { label: 'Next ▶', act: { type: 'next' }, cls: 'good big' };
   return null;
 }
 let endArm = false, restartArm = false;
@@ -798,7 +801,7 @@ function renderCtl() {
   else if (me && ph === 'question') h += `<span class="mine">👑 You:</span>` + (me.answered ? `<span class="mine ok">locked in ✓</span>` : LETTERS.map((L, i) => `<button class="btn mybtn" style="background:${LC[i]};color:#fff" onclick="hostAct({type:'hostAnswer',choice:${i}})">${L}</button>`).join('')) + `<span class="sep"></span>`;
   const playing = me && (ph === 'multiplier' || ph === 'question');
   if (ph === 'lobby') h += `<button class="btn ghost" onclick="shareLink()">💬 Text link</button><button class="btn ghost" onclick="openSheet()">📸 Photos</button>`;
-  else h += `<button class="btn ghost" onclick="hostAct({type:'lobby'})" title="Back to the lobby, keeps players and scores">Lobby</button>`;
+  else if (!playing) h += `<button class="btn ghost" onclick="hostAct({type:'lobby'})" title="Back to the lobby, keeps players and scores">Lobby</button>`;
   if (!playing) h += `<button class="btn ${restartArm ? 'bad' : 'ghost'}" onclick="restartGame()">${restartArm ? 'Tap again: restart' : '↻ Restart'}</button>`;
   if (!playing && ph !== 'lobby' && ph !== 'final' && ph !== 'category') h += `<button class="btn ghost" onclick="hostAct({type:'skipRound'})">${HS.settings.perPick === 1 ? 'Skip question' : 'Skip round'}</button>`;
   if (ph === 'scoreboard' || ph === 'category') h += `<button class="btn ${endArm ? 'bad' : 'ghost'}" onclick="endGame()">${endArm ? 'Tap again to end' : 'End game'}</button>`;
@@ -904,7 +907,7 @@ function renderMult() {
     ? `<button class="mb used" disabled><div class="x">×${m}</div><div class="l">used Q${used.indexOf(m) + 1}</div></button>`
     : `<button class="mb ${locked === m ? 'sel' : locked != null ? 'dim' : ''}" style="--c:${hue(m)}" onclick="pickMult(${m})"><div class="x">×${m}</div><div class="w">+${c.base * m}</div></button>`).join('');
   const n = PS.players.filter(x => x.pid).length, k = PS.players.filter(x => x.pid && x.mult != null).length;
-  $('#m-status').textContent = locked != null ? `Locked ×${locked} · ${k}/${n} ready` : `${c.multipliers.length - used.length} left — each one only once`;
+  $('#m-status').textContent = locked != null ? `Locked ×${locked} ✓ · ${k}/${n} ready · question coming` : `Quick! ${c.multipliers.length - used.length} left — each one only once`;
 }
 function renderQuestionP() {
   const q = PS.round.question, p = mine(), ans = p && p.answered ? (chosen ?? -1) : chosen;
