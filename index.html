@@ -99,19 +99,33 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 .hv{position:absolute;inset:0;display:none;animation:in .45s cubic-bezier(.2,.9,.2,1.1);min-height:0}
 .hv.on{display:flex}
 /* lobby */
-.lobby{gap:2vw}
-.join{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.6vh;background:var(--card);border:1px solid var(--line);border-radius:3vh;padding:2vh;min-height:0;overflow:auto}
-.join h1{font-size:4vh;text-align:center}
-.join .codebig{font-size:9vh;font-weight:900;letter-spacing:.25em;color:var(--accent);line-height:1;text-indent:.25em}
-.join .url{font-size:2.2vh;font-weight:800;color:#fff;background:#000;padding:.5em .9em;border-radius:.5em;word-break:break-all;text-align:center;max-width:100%}
+.lobby{flex-direction:column;gap:1.4vh}
+.lobbyrow{flex:1;display:flex;gap:1.6vw;min-height:0}
+.hostbar{flex:none;align-self:center;display:flex;flex-direction:column;align-items:center;gap:.4vh;text-align:center}
+.hostbar .hn{display:flex;align-items:center;gap:1.2vh;background:var(--accent);color:#111;font-weight:900;font-size:3.4vh;padding:.8vh 2.6vh .8vh .8vh;border-radius:999px;box-shadow:0 1vh 3vh rgba(255,190,11,.25)}
+.hostbar .hn .av{width:5vh;height:5vh;border-radius:50%;display:grid;place-items:center;font-size:3vh;background:var(--c)}
+.hostbar .hn.none{background:var(--card);color:var(--muted);border:1px dashed var(--line);font-size:2.4vh;padding:1vh 2.4vh;box-shadow:none}
+.hostbar .cnt{font-size:1.8vh;color:var(--muted);font-weight:800}.hostbar .cnt b{color:var(--good)}
+.join{flex:0 0 26%;max-width:34vh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.6vh;background:var(--card);border:1px solid var(--line);border-radius:3vh;padding:2vh;min-height:0;overflow:auto}
+.join h1{font-size:2.4vh;text-align:center}
+.join .enl{width:auto;padding:.8vh 1.6vh;font-size:1.8vh}
+.join .codebig{font-size:5vh;font-weight:900;letter-spacing:.25em;color:var(--accent);line-height:1;text-indent:.25em}
+.join .url{font-size:1.5vh;font-weight:800;color:#fff;background:#000;padding:.5em .9em;border-radius:.5em;word-break:break-all;text-align:center;max-width:100%}
 .join .sub{color:var(--muted);font-size:1.9vh;text-align:center;font-weight:700}
-#qr{background:#fff;padding:1vh;border-radius:1.5vh;display:none}#qr svg{display:block;width:20vh;height:20vh}
-.slots{flex:1.1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:1.2vh;min-height:0}
+#qr{background:#fff;padding:1vh;border-radius:1.5vh;display:none}#qr svg{display:block;width:16vh;height:16vh}#qr{cursor:zoom-in}
+.bigjoin{position:fixed;inset:0;z-index:30;background:rgba(5,8,20,.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:2.5vh;padding:3vh}
+.bigjoin.on{display:flex}.bigjoin h1{font-size:4.5vh}
+.bigjoin .bq{background:#fff;padding:2vh;border-radius:2.5vh}.bigjoin .bq svg{display:block;width:min(52vh,80vw);height:min(52vh,80vw)}
+.bigjoin .bc{font-size:13vh;font-weight:900;letter-spacing:.25em;text-indent:.25em;color:var(--accent);line-height:1}
+.bigjoin .url{font-size:2.6vh;font-weight:800;background:#000;padding:.5em .9em;border-radius:.5em;word-break:break-all;text-align:center}
+.bigjoin .sub{color:var(--muted);font-size:2vh}
+.slots{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:1.2vh;min-height:0}
 .slot{display:flex;align-items:center;gap:1.2vh;padding:1vh 1.4vh;border-radius:2vh;background:var(--card);border:1px solid var(--line);font-size:2.2vh;position:relative;overflow:hidden;min-height:0}
 .slot.empty{justify-content:center;color:var(--muted);border-style:dashed;font-weight:600}
-.slot .av{width:4.6vh;height:4.6vh;border-radius:50%;display:grid;place-items:center;font-size:2.8vh;background:var(--c);flex:none}
-.slot .nm{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.slot .st{font-size:1.6vh;color:var(--muted);font-weight:700}.slot.ok .st{color:var(--good)}
+.slot .av{width:6.4vh;height:6.4vh;border-radius:50%;display:grid;place-items:center;font-size:3.8vh;background:var(--c);flex:none}
+.slot .nm{font-size:3vh;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot .st{display:inline-block;margin-top:.4vh;font-size:1.6vh;font-weight:900;padding:.2vh 1vh;border-radius:999px;background:rgba(255,255,255,.08);color:var(--muted)}.slot.ok .st{background:rgba(46,229,157,.18);color:var(--good)}.slot.me .st{background:var(--accent);color:#111}
+.slot{border-left:.8vh solid var(--c)}.slot.empty{border-left-width:1px}
 .slot .x{margin-left:auto;background:rgba(0,0,0,.4);border:0;color:#fff;border-radius:50%;width:3.2vh;height:3.2vh;font-size:1.8vh;flex:none}
 .addrow{grid-column:1/-1;display:flex;gap:1vh;align-items:center}
 .addrow input{font-size:2.2vh;padding:.5em .9em;border-radius:1.2vh}
@@ -225,7 +239,9 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
 
 /* portrait host (phone not rotated) */
 @media (orientation:portrait){
-  .lobby{flex-direction:column}.join{flex:none}.join .codebig{font-size:12vw}
+  .lobbyrow{flex-direction:column}.chip.me{display:none}.youtag{display:none}
+  .lobby{overflow-y:auto}.lobbyrow{flex:none}.slots{flex:none;grid-template-columns:1fr;grid-auto-rows:auto}.slot{padding:1vh 1.2vh;min-height:7vh}.slot .st{white-space:nowrap}.slot .av{width:4.6vh;height:4.6vh;font-size:2.7vh}.slot .nm{font-size:2.3vh}
+  .slot.empty{display:none}.slot.empty:first-of-type,.slot:not(.empty)+.slot.empty{display:flex;padding:1.4vh}.join{flex:none;max-width:none;flex-direction:row;flex-wrap:wrap;justify-content:center}.join h1,.join .sub{width:100%}#qr svg{width:12vh;height:12vh}
   .catgrid{grid-template-columns:1fr 1fr}
   .pgrid{grid-template-columns:1fr 1fr}
   .qbody{flex-direction:column}.qtext{font-size:3vh}.hopts{height:34vh}.opt{font-size:2.3vh}
@@ -300,14 +316,18 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
   </div>
   <div class="stage">
     <div class="hv lobby" id="hv-lobby">
-      <div class="join">
-        <h1>Join on your phone</h1>
-        <div class="codebig" id="codebig"></div>
-        <div class="url" id="url"></div>
-        <div id="qr"></div>
-        <div class="sub">Open the link (or the site + room code) · tap your name · anyone can join late</div><div class="sub" id="nightline"></div>
+      <div class="hostbar" id="hostbar"></div>
+      <div class="lobbyrow">
+        <div class="join">
+          <h1>Join on your phone</h1>
+          <div id="qr" onclick="openBig()"></div>
+          <div class="codebig" id="codebig"></div>
+          <div class="url" id="url"></div>
+          <button class="btn ghost sm enl" onclick="openBig()">⤢ Enlarge</button>
+          <div class="sub">Scan or open the link · tap your name</div><div class="sub" id="nightline"></div>
+        </div>
+        <div class="slots" id="slots"></div>
       </div>
-      <div class="slots" id="slots"></div>
     </div>
     <div class="hv cats" id="hv-category"><h1 id="cat-title">Pick a category</h1><div class="catgrid" id="catgrid"></div></div>
     <div class="hv mult" id="hv-multiplier"><div class="preview" id="preview"></div><h1>How confident are you? Lock in a multiplier 📱</h1><div class="rules" id="rules"></div><div class="pgrid" id="mgrid"></div><h2>The question appears once everyone has locked in</h2></div>
@@ -339,6 +359,7 @@ input.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-s
   <div class="plist" id="plist"></div>
 </div>
 
+<div class="bigjoin" id="bigjoin" onclick="closeBig()"><h1>Join on your phone</h1><div class="bq" id="bigqr"></div><div class="bc" id="bigcode"></div><div class="url" id="bigurl"></div><div class="sub">tap anywhere to close</div></div>
 <div class="toast" id="toast"></div>
 <div class="conn" id="conn">Connecting…</div>
 
@@ -570,15 +591,17 @@ function renderHost() {
 }
 function renderLobby() {
   showIn('.hv', 'hv-lobby');
-  $('#codebig').textContent = HS.code;
+  $('#codebig').textContent = HS.code; $('#bigcode').textContent = HS.code;
+  const hp = HS.players.find(p => p.pid === 'host'), nOn = HS.players.filter(p => p.pid).length;
+  $('#hostbar').innerHTML = (hp ? `<div class="hn" style="--c:${hp.color}"><div class="av">${hp.avatar}</div>👑 Host: ${esc(hp.name)}</div>` : `<div class="hn none">👑 Host not playing — add your name and tap “Me”</div>`) + `<div class="cnt">${HS.players.length}/${CONFIG.maxPlayers} players · <b>${nOn} ready</b></div>`;
   const nt = nightTable(); $('#nightline').textContent = nt.length ? 'Tonight so far: ' + nt.slice(0, 3).map((p, i) => `${i + 1}. ${p.name} ${p.total}`).join(' · ') : '';
-  $('#url').textContent = roomUrl(HS.code).replace(/^https?:\/\//, '');
-  if (!qrDone && window.qrcode) { try { const q = qrcode(0, 'M'); q.addData(roomUrl(HS.code)); q.make(); $('#qr').innerHTML = q.createSvgTag({ cellSize: 6, margin: 0, scalable: true }); $('#qr').style.display = 'block'; } catch {} qrDone = true; }
+  $('#url').textContent = $('#bigurl').textContent = roomUrl(HS.code).replace(/^https?:\/\//, '');
+  if (!qrDone && window.qrcode) { try { const q = qrcode(0, 'M'); q.addData(roomUrl(HS.code)); q.make(); $('#qr').innerHTML = $('#bigqr').innerHTML = q.createSvgTag({ cellSize: 6, margin: 0, scalable: true }); $('#qr').style.display = 'block'; } catch {} qrDone = true; }
   let h = '';
   for (let i = 0; i < CONFIG.maxPlayers; i++) {
     const p = HS.players[i];
     const isMe = p && p.pid === 'host', hasMe = HS.players.some(x => x.pid === 'host');
-    if (p) h += `<div class="slot ${p.pid ? 'ok' : ''} ${isMe ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div style="min-width:0"><div class="nm">${isMe ? '<span class="youtag">👑 YOU</span>' : ''}${esc(p.name)}</div><div class="st">${isMe ? 'host · plays on this screen' : p.pid ? '✓ phone connected' : 'waiting for their phone…'}</div></div>${isMe ? `<button class="mebtn" onclick="hostAct({type:'hostNotMe'})">not me</button>` : (!p.pid && !hasMe ? `<button class="mebtn" onclick="hostAct({type:'hostMe',id:'${p.id}'})">👑 Me</button>` : '')}<button class="x" onclick="hostAct({type:'removePlayer',id:'${p.id}'})">✕</button></div>`;
+    if (p) h += `<div class="slot ${p.pid ? 'ok' : ''} ${isMe ? 'me' : ''}" style="--c:${p.color}"><div class="av">${p.avatar}</div><div style="min-width:0"><div class="nm">${isMe ? '<span class="youtag">👑 YOU</span>' : ''}${esc(p.name)}</div><div class="st">${isMe ? '👑 HOST · on this screen' : p.pid ? '✓ Ready on phone' : '… waiting to join'}</div></div>${isMe ? `<button class="mebtn" onclick="hostAct({type:'hostNotMe'})">not me</button>` : (!p.pid && !hasMe ? `<button class="mebtn" onclick="hostAct({type:'hostMe',id:'${p.id}'})">👑 Me</button>` : '')}<button class="x" onclick="hostAct({type:'removePlayer',id:'${p.id}'})">✕</button></div>`;
     else h += `<div class="slot empty" onclick="$('#addname').focus()">+ add player</div>`;
   }
   h += `<div class="addrow"><input id="addname" placeholder="Add a name (add yourself, then tap 👑 Me)" maxlength="16"><button class="btn ghost sm" onclick="addName()">Add</button></div>`;
@@ -586,6 +609,8 @@ function renderLobby() {
   $('#slots').innerHTML = h; $('#addname').value = keep;
   $('#addname').onkeydown = (e) => { if (e.key === 'Enter') addName(); };
 }
+function openBig() { $('#bigjoin').classList.add('on'); }
+function closeBig() { $('#bigjoin').classList.remove('on'); }
 function addName() { const i = $('#addname'); const n = i.value.trim(); if (!n) return; hostAct({ type: 'addPlayer', name: n }); i.value = ''; }
 function renderCategory() {
   showIn('.hv', 'hv-category');
